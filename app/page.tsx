@@ -134,8 +134,8 @@ export default function ExpenseTrackerHomepage() {
               </div>
               <div className="mt-4 text-sm text-gray-400 space-y-2">
                 <p>Examples:</p>
-                <p>• "How much did I spend on food last month?"</p>
-                <p>• "Suggest ways to reduce my utility expenses"</p>
+                <p>How much did I spend on food last month</p>
+                <p>Suggest ways to reduce my utility expenses</p>
               </div>
             </CardContent>
           </Card>
