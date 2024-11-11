@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -25,9 +26,9 @@ export default function SignInPage() {
     }
     router.push('/');
 
-    // axios.post("http://localhost:3000/api/signin", { email, password })
-    //   .then(() => router.push('/'))
-    //   .catch(() => setError('Invalid email or password'))
+    axios.post("http://localhost:3000/api/Signin", { email, password })
+      .then(() => router.push('/'))
+      .catch(() => setError('Invalid email or password'))
 
     setEmail('')
     setPassword('')

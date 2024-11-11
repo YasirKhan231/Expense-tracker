@@ -32,7 +32,7 @@ export default function SignupPage() {
     }
 
     // Here you would typically send the data to your backend API
-    axios.post("http://localhost:3000/api/user" , { username , password , email })
+    axios.post("http://localhost:3000/api/Signup" , { username , password , email })
     console.log('Signup data:', { username, email, password })
     router.push('/')
 
