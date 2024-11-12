@@ -28,7 +28,7 @@ if(!ispasswordvalid) {
     message :" login succesful with credirentioals",
   }, {status : 200})
 
-} catch (e) {
+} catch  {
 return NextResponse.json({
   message :"eror while the login "})
 }

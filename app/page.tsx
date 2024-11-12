@@ -1,4 +1,4 @@
-import { Bell, CreditCard, Home, PieChart, Settings, Users, Wallet } from "lucide-react"
+import { Bell, CreditCard, Home, PieChart, Settings,  Wallet } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,7 +17,7 @@ export default function Component() {
 
   const recentTransactions = [
     {
-      
+
       id: "84995",
       name: "Grocery Shopping",
       amount: -120.50,

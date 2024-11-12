@@ -26,7 +26,7 @@ export async function POST (req:NextRequest) {
     return NextResponse.json( {
       message : "user created succesfully "
     })
-  } catch (e) {
+  } catch  {
     return NextResponse.json({ message :"error while signinig up "}, {
       status : 411
     })
