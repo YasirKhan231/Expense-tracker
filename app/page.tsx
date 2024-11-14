@@ -52,7 +52,7 @@ export default function Component() {
       <Button
         variant="outline"
         size="icon"
-        className={`fixed top-4 z-50 transition-all duration-300 ${isSidebarOpen ? 'left-[248px]' : 'left-4'}`}
+        className={`fixed left-13 top-3.5 z-50 transition-all duration-300 ${isSidebarOpen ? 'left-[258px]' : 'left-14.5'}`}
         onClick={toggleSidebar}
         aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
@@ -94,7 +94,7 @@ export default function Component() {
 
       <main className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className=" ml-9 text-xl font-semibold">Hi, Alex 👋</h1>
+          <h1 className="ml-12 text-xl font-semibold">Hi, Alex 👋</h1>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
@@ -113,11 +113,37 @@ export default function Component() {
           </div>
         </header>
 
+        {/* New feature: Stylized text */}
+       <div className="bg-gradient-to-r from-indigo-300 to-teal-300 py-12 px-6 text-center rounded-xl shadow-lg">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Take Control of Your Finances
+        </h2>
+        <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform -skew-x-6">
+            [Track]
+          </span>
+          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform skew-x-6">
+            [Budget]
+          </span>
+          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg transform -skew-x-6">
+            [Grow]
+          </span>
+        </p>
+  <button className="mt-8 px-8 py-3 bg-gradient-to-r from-teal-400 to-indigo-500 text-white font-semibold text-lg rounded-lg shadow-md hover:from-teal-500 hover:to-indigo-600 transition-all">
+    Start Tracking
+  </button>
+</div>
+
+
         <div className="p-4 space-y-6">
-          <div className="flex justify-center mb-8">
+          <div className="gap-4 flex justify-center mb-8">
             <Button size="lg" className="w-full max-w-md h-16 text-lg font-semibold rounded-xl shadow-lg bg-black hover:bg-gray-800 text-white transition-colors">
               <PlusCircle className="h-6 w-6 mr-2" />
               Add Expense
+            </Button>
+            <Button size="lg" className="w-full max-w-md h-16 text-lg font-semibold rounded-xl shadow-lg bg-black hover:bg-gray-800 text-white transition-colors">
+              <PlusCircle className="h-6 w-6 mr-2" />
+              Add Income
             </Button>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

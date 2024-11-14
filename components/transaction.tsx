@@ -1,11 +1,13 @@
+"use client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { PlusCircle, MinusCircle } from 'lucide-react'
-
+import { useRouter } from "next/navigation"
 export default function TransactionPage() {
+  const router = useRouter();
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
@@ -53,10 +55,10 @@ export default function TransactionPage() {
               </div>
             </div>
             <div className="flex justify-center space-x-4">
-              <Button size="lg" className="w-40 h-12">
+              <Button size="lg" className="w-40 h-12" onClick={()=>{router.push("/expense/incomeAdd")}}>
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Income
               </Button>
-              <Button size="lg" className="w-40 h-12">
+              <Button size="lg" className="w-40 h-12" onClick={()=>{router.push("/expense/expenseAdd")}}>
                 <MinusCircle className="mr-2 h-4 w-4" /> Add Expense
               </Button>
             </div>
