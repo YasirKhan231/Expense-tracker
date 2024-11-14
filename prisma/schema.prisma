@@ -19,3 +19,30 @@ model User {
   email    String @unique
   password String
 }
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  name        String   @map("expense_name")
+  amount      Float    @map("amount")
+  description String?  @map("description")
+  category    String   @map("category")
+  date        DateTime @map("date")
+
+  createdAt  DateTime  @default(now())
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  expenses Expense[]
+}
+
+model Income {
+  id          Int      @id @default(autoincrement())
+  Incomename  String   @map("expense_name")
+  amount      Float    @map("amount")
+  description String?  @map("description")
+  date        DateTime @map("date")
+}

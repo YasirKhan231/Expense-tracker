@@ -1,9 +1,14 @@
-import { Bell, CreditCard, Home, PieChart, Settings,  Wallet, PlusCircle } from 'lucide-react'
+'use client'
+
+import { useState } from 'react'
+import { Bell, CreditCard, Home, Menu, PieChart, PlusCircle, Settings, Wallet, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function Component() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+
   const spendingData = [
     { day: "Mon", amount: 120 },
     { day: "Tue", amount: 240 },
@@ -40,9 +45,26 @@ export default function Component() {
 
   const maxAmount = Math.max(...spendingData.map(d => d.amount))
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+
   return (
-    <div className="flex h-screen bg-gray-100 flex-col sm:flex-row">
-      <aside className="w-full sm:w-64 bg-white border-b sm:border-r">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      <Button
+        variant="outline"
+        size="icon"
+        className={`fixed top-4 z-50 transition-all duration-300 ${isSidebarOpen ? 'left-[248px]' : 'left-4'}`}
+        onClick={toggleSidebar}
+        aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        {isSidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+      </Button>
+
+      <aside 
+        className={`
+          fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+      >
         <div className="p-4">
           <h2 className="text-xl font-bold">ExpenseTracker</h2>
         </div>
@@ -69,31 +91,36 @@ export default function Component() {
           </Button>
         </nav>
       </aside>
-      <main className="flex-1 overflow-y-auto">
-        <header className="bg-white border-b p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+
+      <main className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+        <header className="bg-white border-b p-4 flex justify-between items-center">
+          <h1 className=" ml-9 text-xl font-semibold">Hi, Alex 👋</h1>
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-semibold">Hi, Alex 👋</h1>
-          </div>
-          <div className="flex items-center space-x-4 flex-wrap justify-center">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Sign In</Button>
-            <Button size="sm" className="hidden sm:inline-flex">Sign Up</Button>
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
+            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+              Sign In
             </Button>
-            <Avatar>
-              <AvatarImage src="/placeholder.svg" />
+            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+              Sign Up
+            </Button>
+            <Button variant="ghost" size="icon" className="p-3">
+              <Bell className="h-6 w-6" />
+              <span className="sr-only">Notifications</span>
+            </Button>
+            <Avatar className="w-12 h-12">
+              <AvatarImage src="/placeholder.svg" alt="User avatar" />
               <AvatarFallback>AX</AvatarFallback>
             </Avatar>
           </div>
         </header>
-        <div className="p-4 sm:p-6 space-y-6 min-h-[calc(100vh-5rem)]">
+
+        <div className="p-4 space-y-6">
           <div className="flex justify-center mb-8">
-            <Button size="lg" className="w-full max-w-md h-16 text-lg font-semibold rounded-xl shadow-lg bg-primary hover:bg-primary/90 transition-colors">
+            <Button size="lg" className="w-full max-w-md h-16 text-lg font-semibold rounded-xl shadow-lg bg-black hover:bg-gray-800 text-white transition-colors">
               <PlusCircle className="h-6 w-6 mr-2" />
               Add Expense
             </Button>
           </div>
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
@@ -125,17 +152,17 @@ export default function Component() {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-            <Card className="md:col-span-2 lg:col-span-1">
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
               <CardHeader>
                 <CardTitle>Spending Overview</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] sm:h-[300px] flex items-end justify-between">
+                <div className="h-[200px] flex items-end justify-between">
                   {spendingData.map((data, index) => (
                     <div key={index} className="flex flex-col items-center">
                       <div 
-                        className="w-6 sm:w-8 bg-blue-500 rounded-t"
+                        className="w-6 bg-black rounded-t"
                         style={{ height: `${(data.amount / maxAmount) * 100}%` }}
                       ></div>
                       <span className="text-xs mt-2">{data.day}</span>
@@ -144,12 +171,12 @@ export default function Component() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="md:col-span-2 lg:col-span-1">
+            <Card>
               <CardHeader>
                 <CardTitle>Recent Transactions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {recentTransactions.map((transaction) => (
                     <div key={transaction.id} className="flex items-center justify-between">
                       <div>
