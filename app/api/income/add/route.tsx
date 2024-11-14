@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+
 import { NextRequest, NextResponse } from "next/server";
 import client from "@/db"
 
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       
     });
     return NextResponse.json(Income, { status: 200 });
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ error: 'Failed to add income' }, { status: 500 });
   }
 }

@@ -39,7 +39,7 @@ export default function AddIncomePage() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/income/add", incomeData)
+       await axios.post("http://localhost:3000/api/income/add", incomeData)
       
       toast({
         description: "Income added successfully.",
@@ -51,8 +51,9 @@ export default function AddIncomePage() {
       setAmount('')
       setDescription('')
       setDate(undefined)
-    } catch (error: any) {
+    } catch (error) {
       toast({
+        //@ts-ignore
         description: error.response?.data?.error || "An error occurred while adding the income.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       })

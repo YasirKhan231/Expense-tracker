@@ -50,7 +50,7 @@ export default function AddExpensePage() {
     }
     console.log("Sending expense data:", expenseData);
     try {
-      const response = await axios.post("http://localhost:3000/api/expense/add" , expenseData);
+       await axios.post("http://localhost:3000/api/expense/add" , expenseData);
 
       toast({
         description: "Expense added successfully.",
@@ -63,10 +63,12 @@ export default function AddExpensePage() {
     setCategory('');
     setDescription('');
     setDate(undefined);
-    } catch (error :any) {
+
+    } catch (error ) {
       console.error('Error adding expense:', error);
   
       toast({
+      //@ts-ignore
         description: error.response?.data?.error || "An error occurred while adding the expense.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       });

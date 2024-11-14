@@ -14,10 +14,11 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   username String
-  email    String @unique
+  email    String    @unique
   password String
+  expenses Expense[] // Connects each user to their expenses
 }
 
 model Expense {
@@ -27,8 +28,11 @@ model Expense {
   description String?  @map("description")
   category    String   @map("category")
   date        DateTime @map("date")
+  createdAt   DateTime @default(now())
 
-  createdAt  DateTime  @default(now())
+  user   User? @relation(fields: [userId], references: [id]) // User is optional here
+  userId Int? // Make userId nullable initially
+
   Category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
 }

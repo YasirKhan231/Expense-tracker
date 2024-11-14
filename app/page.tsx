@@ -114,21 +114,21 @@ export default function Component() {
         </header>
 
         {/* New feature: Stylized text */}
-       <div className="bg-gradient-to-r from-indigo-300 to-teal-300 py-12 px-6 text-center rounded-xl shadow-lg">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-          Take Control of Your Finances
-        </h2>
-        <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
-          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform -skew-x-6">
-            [Track]
-          </span>
-          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform skew-x-6">
-            [Budget]
-          </span>
-          <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg transform -skew-x-6">
-            [Grow]
-          </span>
-        </p>
+        <div className="bg-gradient-to-r from-indigo-300 to-teal-300 py-12 px-6 text-center rounded-xl shadow-lg">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+    Take Control of Your Finances
+  </h2>
+  <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform -skew-x-6">
+      [Track]
+    </span>
+    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform skew-x-6">
+      [Budget]
+    </span>
+    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg transform -skew-x-6">
+      [Grow]
+    </span>
+  </p>
   <button className="mt-8 px-8 py-3 bg-gradient-to-r from-teal-400 to-indigo-500 text-white font-semibold text-lg rounded-lg shadow-md hover:from-teal-500 hover:to-indigo-600 transition-all">
     Start Tracking
   </button>
