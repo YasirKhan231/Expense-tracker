@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Bell, CreditCard, Home, CircleIcon as InformationCircleIcon, MinusCircle, PieChart, PlusCircle, Wallet } from 'lucide-react'
+import { Bell, CreditCard, Home, Info, MinusCircle, PieChart, PlusCircle, Wallet } from 'lucide-react'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
@@ -34,7 +34,7 @@ export default function TransactionPage() {
         `}
       >
         <div className="p-4">
-          <h2 className=" text-2xl font-bold mb-4">ExpenseTracker</h2>
+          <h2 className="text-2xl font-bold mb-4">ExpenseTracker</h2>
         </div>
         <nav className="space-y-2 p-2">
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/home") }}>
@@ -54,7 +54,7 @@ export default function TransactionPage() {
             Budgets
           </Button>
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/about") }}>
-            <InformationCircleIcon className="mr-2 h-4 w-4" />
+            <Info className="mr-2 h-4 w-4" />
             About us 
           </Button>
         </nav>

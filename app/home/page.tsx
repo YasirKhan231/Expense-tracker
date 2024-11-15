@@ -77,7 +77,7 @@ export default function Component() {
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button variant="ghost" className="w-full justify-start">
+          <Button  onClick={()=>{router.push("/analytics")}} variant="ghost" className="w-full justify-start">
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
@@ -85,7 +85,7 @@ export default function Component() {
             <CreditCard className="mr-2 h-4 w-4" />
             Transactions
           </Button>
-          <Button variant="ghost" className="w-full justify-start">
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
@@ -100,10 +100,10 @@ export default function Component() {
         <header className="bg-white border-b p-4 flex justify-between items-center">
           <h1 className="ml-12 text-xl font-semibold">Hi, Alex 👋</h1>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+            <Button  onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
             </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+            <Button  onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign Up
             </Button>
             <Button variant="ghost" size="icon" className="p-3">

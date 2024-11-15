@@ -8,11 +8,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
-export default function AboutUsPage() {
+export default function AnalyticsPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+
+  // Sample data for analytics
+  const monthlyExpenses = [
+    { category: 'Food', amount: 500 },
+    { category: 'Rent', amount: 1200 },
+    { category: 'Utilities', amount: 300 },
+    { category: 'Transportation', amount: 200 },
+    { category: 'Entertainment', amount: 150 },
+  ]
+
+  const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0)
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -41,7 +52,7 @@ export default function AboutUsPage() {
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button  onClick={()=>{router.push("/analytics")}} variant="ghost" className="w-full justify-start">
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/analytics") }}>
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
@@ -49,7 +60,7 @@ export default function AboutUsPage() {
             <CreditCard className="mr-2 h-4 w-4" />
             Transactions
           </Button>
-          <Button  variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
@@ -63,7 +74,7 @@ export default function AboutUsPage() {
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Navbar */}
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">About ExpenseTracker</h1>
+          <h1 className="ml-12 text-xl font-semibold">Analytics</h1>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
@@ -86,35 +97,40 @@ export default function AboutUsPage() {
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold">Welcome to ExpenseTracker</CardTitle>
+              <CardTitle>Monthly Expense Breakdown</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-4">
-                ExpenseTracker is your ultimate companion for managing personal finances. We understand that keeping track of your expenses and income can be challenging, which is why we've created a simple, intuitive, and powerful tool to help you take control of your financial life.
-              </p>
-              <h3 className="text-xl font-semibold mb-2">Our Mission</h3>
-              <p className="mb-4">
-                Our mission is to empower individuals and families to achieve financial wellness through better expense tracking, budgeting, and financial insights. We believe that everyone should have access to tools that make financial management easy and effective.
-              </p>
-              <h3 className="text-xl font-semibold mb-2">Key Features</h3>
-              <ul className="list-disc list-inside mb-4">
-                <li>Easy expense and income tracking</li>
-                <li>Customizable budgets and financial goals</li>
-                <li>Insightful analytics and reports</li>
-                <li>Secure and private data management</li>
-                <li>Multi-platform support (web, iOS, and Android)</li>
-              </ul>
-              <h3 className="text-xl font-semibold mb-2">Our Story</h3>
-              <p className="mb-4">
-                ExpenseTracker was founded in 2023 by a team of finance professionals and software engineers who were frustrated with the complexity of existing financial management tools. We set out to create a solution that combines powerful features with a user-friendly interface, making it accessible to everyone, regardless of their financial expertise.
-              </p>
-              <h3 className="text-xl font-semibold mb-2">Our Commitment</h3>
-              <p className="mb-4">
-                We are committed to continuously improving ExpenseTracker based on user feedback and the latest financial management best practices. Our team works tirelessly to ensure that you have the best tools at your fingertips to manage your finances effectively.
-              </p>
-              <p>
-                Thank you for choosing ExpenseTracker. We're excited to be part of your journey towards financial success!
-              </p>
+              <div className="space-y-4">
+                {monthlyExpenses.map((expense, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <span>{expense.category}</span>
+                    <span>${expense.amount}</span>
+                  </div>
+                ))}
+                <div className="border-t pt-4 font-bold flex justify-between items-center">
+                  <span>Total Expenses</span>
+                  <span>${totalExpenses}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Expense Distribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 flex items-end justify-between">
+                {monthlyExpenses.map((expense, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div 
+                      className="w-16 bg-blue-500 rounded-t"
+                      style={{ height: `${(expense.amount / totalExpenses) * 100}%` }}
+                    ></div>
+                    <span className="text-xs mt-2">{expense.category}</span>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </main>

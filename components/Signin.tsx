@@ -26,7 +26,7 @@ export default function SignInPage() {
     }
 
     axios.post("http://localhost:3000/api/Signin", { email, password })
-      .then(() => router.push('/'))
+      .then(() => router.push('/home'))
       .catch(() => setError('Invalid email or password'))
 
     setEmail('')

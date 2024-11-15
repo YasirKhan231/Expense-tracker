@@ -16,10 +16,10 @@ export default function AboutUsPage() {
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <h1 className="text-xl font-semibold">About ExpenseTracker</h1>
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+              <Button onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
             Sign In
           </Button>
-          <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+          <Button onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
             Sign Up
           </Button>
           <Button variant="ghost" size="icon" className="p-3">
