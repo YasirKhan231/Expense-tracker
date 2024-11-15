@@ -53,7 +53,7 @@ export default function AddIncomePage() {
       setDate(undefined)
     } catch (error) {
       toast({
-        //@ts-ignore
+         //@ts-expect-error
         description: error.response?.data?.error || "An error occurred while adding the income.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       })

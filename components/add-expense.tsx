@@ -68,7 +68,7 @@ export default function AddExpensePage() {
       console.error('Error adding expense:', error);
   
       toast({
-      //@ts-ignore
+       //@ts-expect-error
         description: error.response?.data?.error || "An error occurred while adding the expense.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       });

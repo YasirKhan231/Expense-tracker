@@ -1,6 +1,5 @@
 // /pages/api/user-expenses.ts
 
-import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from  "@/db"
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -14,7 +13,7 @@ export default async function GET(req: NextRequest) {
       });
       
      return  NextResponse.json({expenses ,  status :200});
-    } catch (error) {
+    } catch  {
      return NextResponse.json({ error: "Error fetching user expenses" } , {status :500});
     }
   }
