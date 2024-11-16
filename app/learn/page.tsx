@@ -14,7 +14,7 @@ export default function AboutUsPage() {
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Navbar */}
       <header className="bg-white border-b p-4 flex justify-between items-center">
-        <h1 className="text-xl font-semibold">About ExpenseTracker</h1>
+        <h1 className="text-xl font-semibold">About WalletWise</h1>
         <div className="flex items-center space-x-4">
               <Button onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
             Sign In

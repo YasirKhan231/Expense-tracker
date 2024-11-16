@@ -1,22 +1,59 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
+import { useState } from 'react'
+import { Bell, CreditCard, Home, Menu, MinusCircle, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Bell, CreditCard, Home, Info, MinusCircle, PieChart, PlusCircle, Wallet } from 'lucide-react'
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'; // Import Image component for handling logos
+import logo from "@/app/logo.png" // Your logo image path
 
-export default function TransactionPage() {
-  const router = useRouter();
+export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const router = useRouter()
+
+  const spendingData = [
+    { day: "Mon", amount: 120 },
+    { day: "Tue", amount: 240 },
+    { day: "Wed", amount: 180 },
+    { day: "Thu", amount: 320 },
+    { day: "Fri", amount: 280 },
+    { day: "Sat", amount: 400 },
+    { day: "Sun", amount: 200 },
+  ]
+
+  const recentTransactions = [
+    {
+      id: "84995",
+      name: "Grocery Shopping",
+      amount: -120.50,
+      date: "22 June 2024",
+      category: "Food",
+    },
+    {
+      id: "84994",
+      name: "Salary Deposit",
+      amount: 3500.00,
+      date: "21 June 2024",
+      category: "Income",
+    },
+    {
+      id: "84993",
+      name: "Netflix Subscription",
+      amount: -15.99,
+      date: "20 June 2024",
+      category: "Entertainment",
+    },
+  ]
+
+  const maxAmount = Math.max(...spendingData.map(d => d.amount))
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
       <Button
         variant="outline"
         size="icon"
@@ -26,22 +63,21 @@ export default function TransactionPage() {
       >
         {isSidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
       </Button>
-      {/* Sidebar */}
+
       <aside 
-        className={`
-          fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">ExpenseTracker</h2>
+          <h2 className="text-2xl font-bold">WalletWise</h2>
         </div>
-        <nav className="space-y-2 p-2">
+        
+        <nav className="space-y-2 p-2 mt-4">
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/home") }}>
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button variant="ghost" className="w-full justify-start">
+          <Button onClick={() => { router.push("/analytics") }} variant="ghost" className="w-full justify-start">
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
@@ -49,21 +85,35 @@ export default function TransactionPage() {
             <CreditCard className="mr-2 h-4 w-4" />
             Transactions
           </Button>
-          <Button variant="ghost" className="w-full justify-start">
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/about") }}>
-            <Info className="mr-2 h-4 w-4" />
+            <InformationCircleIcon className="mr-2 h-4 w-4" />
             About us 
           </Button>
         </nav>
       </aside>
 
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        {/* Navbar */}
+      <main className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">Hi, Alex 👋</h1>
+          {/* Replacing the "Hi, Alex 👋" greeting with the logo */}
+          <div 
+            className="ml-12 flex items-center space-x-4 cursor-pointer"
+            onClick={() => router.push("/home")}
+          >
+            <Image 
+              src={logo} 
+              alt="WalletWise Logo" 
+              width={64} 
+              height={64} 
+              className="object-contain" 
+            />
+            {/* Optional, add a logo description or tagline */}
+            {/* <span className="text-xl font-semibold">WalletWise</span> */}
+          </div>
+
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
@@ -82,9 +132,9 @@ export default function TransactionPage() {
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Main Card */}
+        {/* Main content */}
+        <div className="p-8">
+          {/* You can add your content here, like cards, tables, etc. */}
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Your Financial Overview</CardTitle>
@@ -116,57 +166,30 @@ export default function TransactionPage() {
             </CardContent>
           </Card>
 
-          {/* Transaction Statement */}
-          <h2 className="text-2xl font-bold mb-4">Transaction Statement</h2>
-          <Card>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Transaction</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead className="hidden md:table-cell">Description</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div>Grocery Shopping</div>
-                      <div className="text-sm text-gray-500">May 15, 2023</div>
-                    </TableCell>
-                    <TableCell className="text-red-600">-$85.50</TableCell>
-                    <TableCell className="hidden md:table-cell">Weekly groceries from Whole Foods</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div>Freelance Payment</div>
-                      <div className="text-sm text-gray-500">May 14, 2023</div>
-                    </TableCell>
-                    <TableCell className="text-green-600">+$750.00</TableCell>
-                    <TableCell className="hidden md:table-cell">Website design project completion</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div>Electric Bill</div>
-                      <div className="text-sm text-gray-500">May 10, 2023</div>
-                    </TableCell>
-                    <TableCell className="text-red-600">-$120.30</TableCell>
-                    <TableCell className="hidden md:table-cell">Monthly electricity payment</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div>Salary Deposit</div>
-                      <div className="text-sm text-gray-500">May 1, 2023</div>
-                    </TableCell>
-                    <TableCell className="text-green-600">+$3,500.00</TableCell>
-                    <TableCell className="hidden md:table-cell">Monthly salary from Acme Inc.</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </main>
-      </div>
+
+          {/* Recent Transactions */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold">Recent Transactions</h2>
+            <div className="space-y-4 mt-4">
+              {recentTransactions.map((transaction) => (
+                <Card key={transaction.id}>
+                  <CardContent className="flex justify-between">
+                    <div>
+                      <h3 className="font-semibold">{transaction.name}</h3>
+                      <p className="text-sm text-gray-500">{transaction.date}</p>
+                    </div>
+                    <div>
+                      <p className={`font-bold ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                        {transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount).toFixed(2)}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }

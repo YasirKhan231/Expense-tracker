@@ -1,14 +1,14 @@
-
 'use client'
 
 import { useState } from 'react'
-import { Bell, CreditCard, Home, Menu, PieChart, PlusCircle,  Wallet, X } from 'lucide-react'
+import { Bell, CreditCard, Home, Menu, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation'
-
+import Image from 'next/image'; // Import Image component for handling logos
+import logo from "@/app/logo.png"
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const router = useRouter();
@@ -63,13 +63,11 @@ export default function Component() {
       </Button>
 
       <aside 
-        className={`
-          fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
+        `}>
         <div className="p-4">
-          <h2 className=" text-2xl font-bold">ExpenseTracker</h2>
+          <h2 className=" text-2xl font-bold">WalletWise</h2>
         </div>
         
         <nav className="space-y-2 p-2 mt-4">
@@ -98,12 +96,17 @@ export default function Component() {
 
       <main className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">Hi, Alex 👋</h1>
+          {/* Replacing the greeting text with the logo */}
+          <div className="ml-12 flex items-center space-x-4">
+            <Image src={logo} alt="WalletWise Logo" width={64} height={64} className="object-contain cursor-pointer" />
+            {/* Optional, add a logo description or tagline */}
+            {/* <span className="text-xl font-semibold">WalletWise</span> */}
+          </div>
           <div className="flex items-center space-x-4">
-            <Button  onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+            <Button onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
             </Button>
-            <Button  onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+            <Button onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign Up
             </Button>
             <Button variant="ghost" size="icon" className="p-3">
@@ -119,25 +122,24 @@ export default function Component() {
 
         {/* New feature: Stylized text */}
         <div className="bg-gradient-to-r from-indigo-300 to-teal-300 py-12 px-6 text-center rounded-xl shadow-lg">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-    Take Control of Your Finances
-  </h2>
-  <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
-    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform -skew-x-6">
-      [Track]
-    </span>
-    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform skew-x-6">
-      [Budget]
-    </span>
-    <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg transform -skew-x-6">
-      [Grow]
-    </span>
-  </p>
-  <button className="mt-8 px-8 py-3 bg-gradient-to-r from-teal-400 to-indigo-500 text-white font-semibold text-lg rounded-lg shadow-md hover:from-teal-500 hover:to-indigo-600 transition-all">
-    Start Tracking
-  </button>
-</div>
-
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+            Take Control of Your Finances
+          </h2>
+          <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+            <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform -skew-x-6">
+              [Track]
+            </span>
+            <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg mr-3 transform skew-x-6">
+              [Budget]
+            </span>
+            <span className="inline-block px-4 py-2 bg-white bg-opacity-60 rounded-lg transform -skew-x-6">
+              [Grow]
+            </span>
+          </p>
+          <button className="mt-8 px-8 py-3 bg-gradient-to-r from-teal-400 to-indigo-500 text-white font-semibold text-lg rounded-lg shadow-md hover:from-teal-500 hover:to-indigo-600 transition-all">
+            Start Tracking
+          </button>
+        </div>
 
         <div className="p-4 space-y-6">
           <div className="gap-4 flex justify-center mb-8">
@@ -173,12 +175,12 @@ export default function Component() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Savings Goal</CardTitle>
-                <PieChart className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Monthly Income</CardTitle>
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$15,738</div>
-                <p className="text-xs text-muted-foreground">48% of annual target</p>
+                <div className="text-2xl font-bold">$5,000</div>
+                <p className="text-xs text-muted-foreground">+18.7% from last month</p>
               </CardContent>
             </Card>
           </div>

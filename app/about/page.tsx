@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { Progress } from '@radix-ui/react-progress'
+import Image from 'next/image'; // Import Image component for handling logos
+import logo from "@/app/logo.png" // Your logo image path
 
 export default function AboutUsPage() {
   const router = useRouter();
@@ -34,14 +37,14 @@ export default function AboutUsPage() {
         `}
       >
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">ExpenseTracker</h2>
+          <h2 className="text-2xl font-bold mb-4">WalletWise</h2>
         </div>
         <nav className="space-y-2 p-2">
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/home") }}>
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button  onClick={()=>{router.push("/analytics")}} variant="ghost" className="w-full justify-start">
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/analytics") }}>
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
@@ -49,7 +52,7 @@ export default function AboutUsPage() {
             <CreditCard className="mr-2 h-4 w-4" />
             Transactions
           </Button>
-          <Button  variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
@@ -63,7 +66,19 @@ export default function AboutUsPage() {
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Navbar */}
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">About ExpenseTracker</h1>
+          {/* Replacing the "About WalletWise" header with the logo */}
+          <div 
+            className="ml-12 flex items-center space-x-4 cursor-pointer"
+            onClick={() => router.push("/home")}
+          >
+            <Image 
+              src={logo} 
+              alt="WalletWise Logo" 
+              width={64} 
+              height={64} 
+              className="object-contain" 
+            />
+          </div>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
@@ -86,7 +101,7 @@ export default function AboutUsPage() {
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold">Welcome to ExpenseTracker</CardTitle>
+              <CardTitle className="text-3xl font-bold">Welcome to WalletWise</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="mb-4">

@@ -1,41 +1,70 @@
-"use client"
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart3, Bell, DollarSign, Home, PieChart, Plus, Settings, User } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
-import { useRouter } from 'next/navigation'
+"use client";
+
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3, Bell, Home, PieChart, Plus, Settings, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import logo from "./logo.png";  // Import your logo image
 
 export default function AboutUs() {
   const router = useRouter();
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">Hi, Alex 👋</h1>
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4" onClick={()=>{router.push("/signin")}}>
-              Sign In
-            </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4" onClick={()=>{router.push("/signup")}}>
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarFallback className=' '>AX</AvatarFallback>
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-            </Avatar>
-          </div>
-        </header>
+      {/* Header */}
+      <header className="bg-white border-b p-2 flex justify-between items-center">
+        {/* Logo Section */}
+        <div className="flex items-center ml-7">
+          <Image
+            src={logo}
+            alt="ExpenseTracker Logo"
+            className="w-20 h-auto"
+            width={76}
+            height={76}
+          />
+        </div>
+        {/* Navigation Buttons */}
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="lg"
+            className="hidden md:inline-flex text-lg py-2 px-4"
+            onClick={() => {
+              router.push("/signin");
+            }}
+          >
+            Sign In
+          </Button>
+          <Button
+            size="lg"
+            className="hidden md:inline-flex text-lg py-2 px-4"
+            onClick={() => {
+              router.push("/signup");
+            }}
+          >
+            Sign Up
+          </Button>
+          <Button variant="ghost" size="icon" className="p-3">
+            <Bell className="h-6 w-6" />
+            <span className="sr-only">Notifications</span>
+          </Button>
+          <Avatar className="w-12 h-12">
+            <AvatarFallback className="">AX</AvatarFallback>
+            <AvatarImage src="/placeholder.svg" alt="User avatar" />
+          </Avatar>
+        </div>
+      </header>
+
+      {/* Main Content */}
       <main className="flex-1">
+        {/* About Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                About ExpenseTracker
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+                About WalletWise
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                 Your personal finance companion for effortless expense management and insightful financial tracking.
@@ -43,6 +72,8 @@ export default function AboutUs() {
             </div>
           </div>
         </section>
+
+        {/* How It Works Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
           <div className="container px-4 md:px-6">
             <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl mb-8 text-center">
@@ -85,11 +116,13 @@ export default function AboutUs() {
             </div>
           </div>
         </section>
+
+        {/* Why Choose Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 sm:grid-cols-2">
               <div className="flex flex-col justify-center space-y-4">
-                <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl">Why Choose ExpenseTracker?</h2>
+                <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl">Why Choose WalletWise?</h2>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <Home className="h-4 w-4 text-green-500" />
@@ -116,23 +149,23 @@ export default function AboutUs() {
                   It's time to make informed decisions about your money.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button onClick={()=>{router.push("/signup")}} className="flex-1">Sign Up Now</Button>
-                  <Button onClick={()=>{router.push("/learn")}} variant="outline" className="flex-1">Learn More</Button>
+                  <Button onClick={() => { router.push("/signup"); }} className="flex-1">Sign Up Now</Button>
+                  <Button onClick={() => { router.push("/learn"); }} variant="outline" className="flex-1">Learn More</Button>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Footer */}
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-          <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-            <p className="text-center text-sm leading-loose text-gray-500 md:text-left dark:text-gray-400">
-              © 2023 ExpenseTracker. All rights reserved.
-            </p>
-          </div>
+          <p className="text-center text-sm leading-loose text-gray-500 md:text-left dark:text-gray-400">
+            © 2023 ExpenseTracker. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
-  )
+  );
 }

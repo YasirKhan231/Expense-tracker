@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
 import { useRouter } from "next/navigation"
@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-
+import Image from 'next/image'; // Import Image component for handling logos
+import logo from "@/app/logo.png"
 export default function AnalyticsPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -39,13 +40,11 @@ export default function AnalyticsPage() {
 
       {/* Sidebar */}
       <aside 
-        className={`
-          fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
+        `}>
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">ExpenseTracker</h2>
+          <h2 className="text-2xl font-bold mb-4">WalletWise</h2>
         </div>
         <nav className="space-y-2 p-2">
           <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/home") }}>
@@ -74,7 +73,10 @@ export default function AnalyticsPage() {
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Navbar */}
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="ml-12 text-xl font-semibold">Analytics</h1>
+          <div className="ml-12 flex items-center space-x-4">
+            {/* Logo Display */}
+            <Image  src={logo} alt="WalletWise Logo" width={64} height={64} onClick={()=>{router.push("/home")}} className="object-contain hover:cursor-pointer" />
+          </div>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
               Sign In
@@ -138,7 +140,7 @@ export default function AnalyticsPage() {
         {/* Footer */}
         <footer className="bg-white border-t py-4">
           <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-            © 2023 ExpenseTracker. All rights reserved.
+            © 2023 WalletWise. All rights reserved.
           </div>
         </footer>
       </div>
