@@ -1,20 +1,19 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import client from "@/db"
+import client from "@/db";
+import jwt from "jsonwebtoken";
 
+const JWT_SECRET = "yasirsecret"; // Your JWT secret key
 
 export async function POST(req: NextRequest) {
   try {
-    // Define the type for the body
     const body: { email: string; password: string } = await req.json();
 
-    // Query the user by email
+    // Check if the user exists
     const existingUser = await client.user.findUnique({
       where: { email: body.email },
     });
 
-    // Check if the user exists
     if (!existingUser) {
       return NextResponse.json(
         { message: "User does not exist in the database" },
@@ -22,26 +21,35 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Compare passwords
+    // Log stored and entered passwords for debugging
+    console.log('Stored Password Hash:', existingUser.password);
+    console.log('Entered Password:', body.password);
+
+    // Compare passwords using bcrypt
     const isPasswordValid = await bcrypt.compare(
-      body.password,
-      existingUser.password
+      body.password.trim(), // Trim any extra spaces
+      existingUser.password.trim()
     );
 
     if (!isPasswordValid) {
       return NextResponse.json(
         { message: "Password is not valid" },
-        { status: 403 }
+        { status: 401 }
       );
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: existingUser.id, email: existingUser.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
     // Successful login response
     return NextResponse.json(
-      { message: "Login successful with credentials" },
-      { status: 200 }
+      { message: "Login successful with credentials", token }
     );
   } catch (error) {
-    console.error("Error during login:", error);
     return NextResponse.json(
       { message: "Error occurred during login" },
       { status: 500 }

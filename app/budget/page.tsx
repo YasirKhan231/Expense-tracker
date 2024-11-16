@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -10,12 +10,41 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Progress } from '@radix-ui/react-progress'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png" // Your logo image path
-
+import axios from "axios"
 export default function BudgetPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+  
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      router.push('/signup')
+      console.log("token are not presrnt in the storage ")
+      return  
+    }
+     console.log(token);
+    // Verify the token with the server
+    axios.post('http://localhost:3000/api/verify-token', { token:token })
+      .then(response => {
+        // If the token is valid, continue to the signup page
+        setIsLoading(false)
+      })
+      .catch(() => {
+        console.log("tken failed homepage ")
+        localStorage.removeItem('token') // Optionally, clear the token
+        router.push('/signin')
+      })
+     
+  }, [router])
+  if (isLoading) {
+    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+  }
 
   // Sample budget data
   const budgets = [

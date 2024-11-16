@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Bell, CreditCard, Home, Menu, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -9,9 +9,43 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
+import axios from "axios"
+
 export default function Component() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      router.push('/signup')
+      console.log("token are not presrnt in the storage ")
+      return  
+    }
+     console.log(token);
+    // Verify the token with the server
+    axios.post('http://localhost:3000/api/verify-token', { token:token })
+      .then(response => {
+        // If the token is valid, continue to the signup page
+        setIsLoading(false)
+      })
+      .catch(() => {
+        console.log("tken failed homepage ")
+        localStorage.removeItem('token') // Optionally, clear the token
+        router.push('/signin')
+      })
+     
+  }, [router])
+  if (isLoading) {
+    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+  }
+
+ 
+  
   const spendingData = [
     { day: "Mon", amount: 120 },
     { day: "Tue", amount: 240 },
@@ -229,3 +263,4 @@ export default function Component() {
     </div>
   )
 }
+
