@@ -33,7 +33,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
     }
 
     // If the token is valid and found in the database
-    return NextResponse.json({ message: 'Token is valid', user }, {status :200});
+    return NextResponse.json({ message: 'Token is valid and presnt in database', user }, {status :200});
 
   } catch (error) {
     // If the token is invalid or expired

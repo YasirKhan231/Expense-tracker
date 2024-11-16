@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
 import axios from "axios"
+import Loading from '@/components/loading'
 
 export default function Component() {
   
@@ -32,6 +33,7 @@ export default function Component() {
       .then(response => {
         // If the token is valid, continue to the signup page
         setIsLoading(false)
+        console.log(response)
       })
       .catch(() => {
         console.log("tken failed homepage ")
@@ -41,7 +43,7 @@ export default function Component() {
      
   }, [router])
   if (isLoading) {
-    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+    return <div> <Loading></Loading> </div>  // Show a loading spinner or something until the check is complete
   }
 
  

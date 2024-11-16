@@ -34,6 +34,7 @@ export default function BudgetPage() {
       .then(response => {
         // If the token is valid, continue to the signup page
         setIsLoading(false)
+        console.log(response)
       })
       .catch(() => {
         console.log("tken failed homepage ")
