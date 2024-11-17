@@ -10,6 +10,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
 import axios from "axios"
+import Loading from '@/components/loading'
 export default function AnalyticsPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -42,7 +43,7 @@ export default function AnalyticsPage() {
      
   }, [router])
   if (isLoading) {
-    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
   }
 
   // Sample data for analytics

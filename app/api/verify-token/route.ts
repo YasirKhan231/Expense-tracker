@@ -19,7 +19,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
   const { token } =await req.json()
   console.log("token")
   try {
-    console.log("inside try c");
+    console.log("inside try catch");
     const decoded = jwt.verify(token, JWT_SECRET)as JwtPayload;;
      
     // Check if the token is associated with an existing user (replace with your database query)
@@ -35,7 +35,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
     // If the token is valid and found in the database
     return NextResponse.json({ message: 'Token is valid and presnt in database', user }, {status :200});
 
-  } catch (error) {
+  } catch {
     // If the token is invalid or expired
     return NextResponse.json({ message: 'Invalid or expired token' });
   }

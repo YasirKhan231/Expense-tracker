@@ -25,10 +25,21 @@ export default function SignInPage() {
       return
     }
 
+    // Make the API request to sign in
     axios.post("http://localhost:3000/api/Signin", { email, password })
-      .then(() => router.push('/home'))
+      .then(response => {
+        // Assuming the response contains a token
+        const { token } = response.data
+        
+        // Store the token in localStorage
+        localStorage.setItem('token', token)
+        
+        // Redirect to the home page
+        router.push('/home')
+      })
       .catch(() => setError('Invalid email or password'))
 
+    // Clear the input fields after submission
     setEmail('')
     setPassword('')
   }
@@ -82,7 +93,7 @@ export default function SignInPage() {
         <CardFooter>
           <p className="text-center text-sm text-gray-600 w-full">
             Don't have an account?{' '}
-            <Link href="/user/signup" className="text-black hover:text-gray-700 transition-colors duration-200">
+            <Link href="/signup" className="text-black hover:text-gray-700 transition-colors duration-200">
               Sign up
             </Link>
           </p>

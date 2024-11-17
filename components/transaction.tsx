@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Bell, CreditCard, Home, Menu, MinusCircle, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -9,10 +9,42 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png" // Your logo image path
-
+import axios from "axios"
+import Loading from './loading'
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [userId,setuserId]=useState(1);
   const router = useRouter()
+  
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      router.push('/signup')
+      console.log("token are not presrnt in the storage ")
+      return  
+    }
+     console.log(token);
+    // Verify the token with the server
+    axios.post('http://localhost:3000/api/verify-token', { token:token })
+      .then(response => {
+        setuserId(response.data.user.id)
+        // If the token is valid, continue to the signup page
+        setIsLoading(false)
+      })
+      .catch(() => {
+        console.log("token failed homepage ")
+        localStorage.removeItem('token') // Optionally, clear the token
+        router.push('/signin')
+      })
+     
+  }, [router])
+  if (isLoading) {
+    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
+  }
 
   const spendingData = [
     { day: "Mon", amount: 120 },
@@ -176,7 +208,7 @@ export default function Component() {
                   <CardContent className="flex justify-between">
                     <div>
                       <h3 className="font-semibold">{transaction.name}</h3>
-                      <p className="text-sm text-gray-500">{transaction.date}</p>
+                      <p className="text-sm text-gray-500">{transaction.date}</p> 
                     </div>
                     <div>
                       <p className={`font-bold ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>

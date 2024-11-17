@@ -17,7 +17,7 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
@@ -31,15 +31,23 @@ export default function SignupPage() {
       return
     }
 
-    // Here you would typically send the data to your backend API
-    axios.post("http://localhost:3000/api/Signup", { username, password, email })
-    console.log('Signup data:', { username, email, password })
-    router.push('/home')
+    try {
+      const response = await axios.post("http://localhost:3000/api/Signup", { username, password, email })
 
-    // Reset form fields after successful submission
-    setUsername('')
-    setEmail('')
-    setPassword('')
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+
+        router.push('/home')
+      } else {
+        setError('Failed to sign up. Please try again.')
+      }
+
+      setUsername('')
+      setEmail('')
+      setPassword('')
+    } catch (error) {
+      setError('Error occurred during signup. Please try again.')
+    }
   }
 
   return (
@@ -103,7 +111,7 @@ export default function SignupPage() {
         <CardFooter>
           <p className="text-center text-sm text-gray-600 w-full">
             Already have an account?{' '}
-            <Link href="/user/signin" className="text-black hover:text-gray-700 transition-colors duration-200">
+            <Link href="/signin" className="text-black hover:text-gray-700 transition-colors duration-200">
               Log in
             </Link>
           </p>

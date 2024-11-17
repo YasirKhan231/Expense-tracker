@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,11 +12,7 @@ import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import axios from 'axios';
 import {
   Select,
@@ -27,6 +23,7 @@ import {
 } from "@/components/ui/select"
 import { useToast } from '@/hooks/use-toast'
 import { ToastAction } from "@/components/ui/toast"
+import Loading from './loading'
 
 export default function AddExpensePage() {
   const [name, setname] = useState('')
@@ -35,79 +32,110 @@ export default function AddExpensePage() {
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>()
   const { toast } = useToast()
- const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true)
+  const[userId , setuserId]=useState(1)
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      router.push('/signup');
+      console.log("Token is not present in the storage");
+      return;
+    }
+  
+    // Verify the token with the server
+    axios.post('http://localhost:3000/api/verify-token', { token: token })
+      .then(response => {
+        // If the token is valid, set userId from the response
+        console.log(response);
+        setIsLoading(false);
+        setuserId(response.data.user.id);  // Assuming response contains user data with the id
+      })
+      .catch(() => {
+        console.log("Token failed verification");
+        localStorage.removeItem('token'); // Optionally, clear the token
+        router.push('/signin');
+      });
+  }, [router]);
+  if (isLoading) {
+    return <div> <Loading></Loading> </div>  // Show a loading spinner or something until the check is complete
+  }
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Prepare the data to be sent to the backend
     const expenseData = {
-      name , 
-      amount :parseFloat(amount),
-      category,
-      description,
-      date : date ? date.toISOString() :null,
+      name, 
+      amount: parseFloat(amount), // Make sure amount is a float
+      category, // Category (string)
+      description, // Description (optional)
+      date: date ? date.toISOString() : null, // Date in ISO format
+      userId,
     }
     console.log("Sending expense data:", expenseData);
     try {
-       await axios.post("http://localhost:3000/api/expense/add" , expenseData);
+      // POST request to the backend endpoint
+      await axios.post("http://localhost:3000/api/expense/add", expenseData);
 
+      // Show success toast
       toast({
         description: "Expense added successfully.",
       });
-      router.push("/");
-      
 
+      // Navigate to the homepage after successful submission
+      router.push("/home");
+
+      // Clear form fields
       setname('');
-    setAmount('');
-    setCategory('');
-    setDescription('');
-    setDate(undefined);
+      setAmount('');
+      setCategory('');
+      setDescription('');
+      setDate(undefined);
 
-    } catch (error ) {
+    } catch (error) {
       console.error('Error adding expense:', error);
-  
+
+      // Show error toast
       toast({
-       //@ts-expect-error
+        //@ts-expect-error
         description: error.response?.data?.error || "An error occurred while adding the expense.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       });
     }
-
-    
-    
   }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white shadow-md">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex justify-between items-center h-16">
-      <div className="flex-shrink-0 flex items-center">
-        <span className="font-bold text-xl text-black">ExpenseDown</span>
-      </div>
-      <div className="flex space-x-4 items-center">
-        <Link href="/">
-          <Button variant="ghost" className="text-black">
-            <Home className="mr-2 h-4 w-4" />
-            Home
-          </Button>
-        </Link>
-        <Link href="/login">
-          <Button variant="ghost" className="text-black">
-            Login
-          </Button>
-        </Link>
-        <Link href="/signup">
-          <Button className="ml-4 bg-black text-white hover:bg-gray-800">
-            Sign Up
-          </Button>
-        </Link>
-      </div>
-    </div>
-  </div>
-</nav>
-
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex-shrink-0 flex items-center">
+              <span className="font-bold text-xl text-black">ExpenseDown</span>
+            </div>
+            <div className="flex space-x-4 items-center">
+              <Link href="/">
+                <Button variant="ghost" className="text-black">
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button variant="ghost" className="text-black">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="ml-4 bg-black text-white hover:bg-gray-800">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       <div className="flex-grow flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-white border-gray-200 shadow-xl">

@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,6 +18,7 @@ model User {
   email    String    @unique
   password String
   expenses Expense[] // Connects each user to their expenses
+  incomes  Income[] // Connects each user to their incomes
 }
 
 model Expense {
@@ -26,27 +26,22 @@ model Expense {
   name        String   @map("expense_name")
   amount      Float    @map("amount")
   description String?  @map("description")
-  category    String   @map("category")
+  category    String   @map("category") // Store category as a string directly
   date        DateTime @map("date")
   createdAt   DateTime @default(now())
 
-  user   User? @relation(fields: [userId], references: [id]) // User is optional here
-  userId Int? // Make userId nullable initially
-
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
-}
-
-model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  expenses Expense[]
+  user   User @relation(fields: [userId], references: [id]) // Expense is linked to a user
+  userId Int // User ID is required for expenses
 }
 
 model Income {
   id          Int      @id @default(autoincrement())
-  Incomename  String   @map("expense_name")
+  Incomename  String   @map("income_name")
   amount      Float    @map("amount")
   description String?  @map("description")
   date        DateTime @map("date")
+  createdAt   DateTime @default(now())
+
+  user   User @relation(fields: [userId], references: [id]) // Income is linked to a user
+  userId Int // User ID is required for incomes
 }

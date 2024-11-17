@@ -18,6 +18,7 @@ export default function Component() {
   const [error, setError] = useState('')
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [userId,setuserId]=useState(1);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -31,9 +32,10 @@ export default function Component() {
     // Verify the token with the server
     axios.post('http://localhost:3000/api/verify-token', { token:token })
       .then(response => {
+        setuserId(response.data.user.id)
         // If the token is valid, continue to the signup page
         setIsLoading(false)
-        console.log(response)
+        console.log(response.data)
       })
       .catch(() => {
         console.log("tken failed homepage ")

@@ -8,6 +8,7 @@ import { Bell, CreditCard, Home, PieChart, Wallet } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from "react"
 import axios from "axios"
+import Loading from "@/components/loading"
 export default function AboutUsPage() {
   const router = useRouter();
   
@@ -38,7 +39,7 @@ export default function AboutUsPage() {
      
   }, [router])
   if (isLoading) {
-    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
   }
 
   return (

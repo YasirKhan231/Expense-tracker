@@ -1,13 +1,12 @@
-
 import { NextRequest, NextResponse } from "next/server";
-import client from "@/db"
+import client from "@/db";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, amount, category, description, date } = body;
+  const { name, amount, category, description, date, userId } = body;
 
   // Validate required fields
-  if (!name || !amount || !category || !date) {
+  if (!name || !amount || !category || !date || !userId) {
     return NextResponse.json({ msg: "Missing required field" }, { status: 400 });
   }
 
@@ -31,11 +30,13 @@ export async function POST(req: NextRequest) {
         category,
         description,
         date: parsedDate,
+        user: { connect: { id: userId } }, // Link the expense to the user
       },
     });
+
     return NextResponse.json(expense, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Failed to add expense' }, { status: 500 });
+    return NextResponse.json({ error: "Failed to add expense" }, { status: 500 });
   }
 }

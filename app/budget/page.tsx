@@ -11,6 +11,7 @@ import { Progress } from '@radix-ui/react-progress'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png" // Your logo image path
 import axios from "axios"
+import Loading from '@/components/loading'
 export default function BudgetPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -44,7 +45,7 @@ export default function BudgetPage() {
      
   }, [router])
   if (isLoading) {
-    return <div>Loading...</div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
   }
 
   // Sample budget data

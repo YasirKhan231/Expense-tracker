@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, CalendarIcon } from 'lucide-react'
 import { Button } from "@/components/ui/button"
@@ -25,8 +25,33 @@ export default function AddIncomePage() {
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>()
+  const [userId,setuserId]=useState(1);
+  const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
   const router = useRouter()
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      router.push('/signup');
+      console.log("Token is not present in the storage");
+      return;
+    }
+  
+    // Verify the token with the server
+    axios.post('http://localhost:3000/api/verify-token', { token: token })
+      .then(response => {
+        // If the token is valid, set userId from the response
+        console.log(response);
+        setIsLoading(false);
+        setuserId(response.data.user.id);  // Assuming response contains user data with the id
+      })
+      .catch(() => {
+        console.log("Token failed verification");
+        localStorage.removeItem('token'); // Optionally, clear the token
+        router.push('/signin');
+      });
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,7 +61,9 @@ export default function AddIncomePage() {
       amount: parseFloat(amount),
       description,
       date: date ? date.toISOString() : null,
+      userId
     }
+    
 
     try {
        await axios.post("http://localhost:3000/api/income/add", incomeData)
@@ -44,7 +71,7 @@ export default function AddIncomePage() {
       toast({
         description: "Income added successfully.",
       })
-      router.push("/")
+      router.push("/home")
 
       // Reset form fields
       setIncomeName('')
