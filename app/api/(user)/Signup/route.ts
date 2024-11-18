@@ -29,7 +29,7 @@ export async function POST (req:NextRequest) {
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email }, // Payload
       JWT_SECRET, // Secret key
-      { expiresIn: "1h" } // Token expiry
+      { expiresIn: "7d" } // Token expiry
     );
     return NextResponse.json( {
       message : "user created succesfully "
