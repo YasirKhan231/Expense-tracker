@@ -22,11 +22,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const negativeAmount = amount > 0 ? -amount : amount;
     // Create expense in the database
     const expense = await client.expense.create({
       data: {
         name,
-        amount: parseFloat(amount), // Ensure amount is a valid float
+        amount: parseFloat(negativeAmount), // Ensure amount is a valid float
         category,
         description,
         date: parsedDate,

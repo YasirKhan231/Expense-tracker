@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet } from 'lucide-react'
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "@/components/loading"
@@ -25,21 +24,19 @@ export default function AboutUsPage() {
       return  
     }
      console.log(token);
-    // Verify the token with the server
     axios.post('http://localhost:3000/api/verify-token', { token:token })
       .then(response => {
-        // If the token is valid, continue to the signup page
         setIsLoading(false)
       })
       .catch(() => {
         console.log("tken failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
+        localStorage.removeItem('token') 
         router.push('/signin')
       })
      
   }, [router])
   if (isLoading) {
-    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  
   }
 
   return (
@@ -69,13 +66,13 @@ export default function AboutUsPage() {
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold">About ExpenseTracker</CardTitle>
+            <CardTitle className="text-3xl font-bold">About Walletwise</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <section>
               <h2 className="text-2xl font-semibold mb-2">Our Mission</h2>
               <p>
-                At ExpenseTracker, we're on a mission to empower individuals and families to achieve financial wellness. We believe that everyone deserves access to powerful, yet easy-to-use tools for managing their finances. Our goal is to simplify expense tracking, budgeting, and financial planning, making it accessible to everyone, regardless of their financial expertise.
+                At Walletwise, we're on a mission to empower individuals and families to achieve financial wellness. We believe that everyone deserves access to powerful, yet easy-to-use tools for managing their finances. Our goal is to simplify expense tracking, budgeting, and financial planning, making it accessible to everyone, regardless of their financial expertise.
               </p>
             </section>
 
@@ -102,7 +99,7 @@ export default function AboutUsPage() {
                 <li>Analyze: View your spending patterns through our intuitive dashboard.</li>
                 <li>Budget: Create budgets based on your spending history and financial goals.</li>
                 <li>Track: Monitor your progress and adjust your spending habits as needed.</li>
-                <li>Grow: Use insights from ExpenseTracker to make informed financial decisions.</li>
+                <li>Grow: Use insights from Walletwise to make informed financial decisions.</li>
               </ol>
             </section>
 
@@ -116,7 +113,7 @@ export default function AboutUsPage() {
             <section>
               <h2 className="text-2xl font-semibold mb-2">Join Us on Your Financial Journey</h2>
               <p>
-                Whether you're looking to get out of debt, save for a big purchase, or simply gain better control over your finances, ExpenseTracker is here to help. Join thousands of users who have already taken control of their financial lives with our powerful yet user-friendly platform.
+                Whether you're looking to get out of debt, save for a big purchase, or simply gain better control over your finances, Walletwise is here to help. Join thousands of users who have already taken control of their financial lives with our powerful yet user-friendly platform.
               </p>
               <div className="mt-4">
                 <Button size="lg" onClick={() => router.push("/signup")}>Get Started Today</Button>
@@ -129,7 +126,7 @@ export default function AboutUsPage() {
       {/* Footer */}
       <footer className="bg-white border-t py-4">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          © 2023 ExpenseTracker. All rights reserved.
+          © 2023 Walletwise. All rights reserved.
         </div>
       </footer>
     </div>

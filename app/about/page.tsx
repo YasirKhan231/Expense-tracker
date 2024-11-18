@@ -7,9 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import { Progress } from '@radix-ui/react-progress'
-import Image from 'next/image'; // Import Image component for handling logos
-import logo from "@/app/logo.png" // Your logo image path
+import Image from 'next/image'; 
+import logo from "@/app/logo.png" 
 import axios from "axios"
 import Loading from '@/components/loading'
 export default function AboutUsPage() {
@@ -19,7 +18,6 @@ export default function AboutUsPage() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -30,21 +28,20 @@ export default function AboutUsPage() {
       return  
     }
      console.log(token);
-    // Verify the token with the server
     axios.post('http://localhost:3000/api/verify-token', { token:token })
       .then(response => {
-        // If the token is valid, continue to the signup page
+      
         setIsLoading(false)
       })
       .catch(() => {
         console.log("tken failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
+        localStorage.removeItem('token') 
         router.push('/signin')
       })
      
   }, [router])
   if (isLoading) {
-    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  
   }
 
   return (
@@ -96,7 +93,6 @@ export default function AboutUsPage() {
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Navbar */}
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          {/* Replacing the "About WalletWise" header with the logo */}
           <div 
             className="ml-12 flex items-center space-x-4 cursor-pointer"
             onClick={() => router.push("/home")}
@@ -135,7 +131,7 @@ export default function AboutUsPage() {
             </CardHeader>
             <CardContent>
               <p className="mb-4">
-                ExpenseTracker is your ultimate companion for managing personal finances. We understand that keeping track of your expenses and income can be challenging, which is why we've created a simple, intuitive, and powerful tool to help you take control of your financial life.
+                Walletwise is your ultimate companion for managing personal finances. We understand that keeping track of your expenses and income can be challenging, which is why we've created a simple, intuitive, and powerful tool to help you take control of your financial life.
               </p>
               <h3 className="text-xl font-semibold mb-2">Our Mission</h3>
               <p className="mb-4">
@@ -151,14 +147,14 @@ export default function AboutUsPage() {
               </ul>
               <h3 className="text-xl font-semibold mb-2">Our Story</h3>
               <p className="mb-4">
-                ExpenseTracker was founded in 2023 by a team of finance professionals and software engineers who were frustrated with the complexity of existing financial management tools. We set out to create a solution that combines powerful features with a user-friendly interface, making it accessible to everyone, regardless of their financial expertise.
+                Walletwise was founded in 2023 by a team of finance professionals and software engineers who were frustrated with the complexity of existing financial management tools. We set out to create a solution that combines powerful features with a user-friendly interface, making it accessible to everyone, regardless of their financial expertise.
               </p>
               <h3 className="text-xl font-semibold mb-2">Our Commitment</h3>
               <p className="mb-4">
-                We are committed to continuously improving ExpenseTracker based on user feedback and the latest financial management best practices. Our team works tirelessly to ensure that you have the best tools at your fingertips to manage your finances effectively.
+                We are committed to continuously improving Walletwise based on user feedback and the latest financial management best practices. Our team works tirelessly to ensure that you have the best tools at your fingertips to manage your finances effectively.
               </p>
               <p>
-                Thank you for choosing ExpenseTracker. We're excited to be part of your journey towards financial success!
+                Thank you for choosing Walletwise. We're excited to be part of your journey towards financial success!
               </p>
             </CardContent>
           </Card>
@@ -167,7 +163,7 @@ export default function AboutUsPage() {
         {/* Footer */}
         <footer className="bg-white border-t py-4">
           <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-            © 2023 ExpenseTracker. All rights reserved.
+            © 2023 Walletwise. All rights reserved.
           </div>
         </footer>
       </div>

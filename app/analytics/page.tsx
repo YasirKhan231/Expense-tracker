@@ -18,7 +18,6 @@ export default function AnalyticsPage() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('token')

@@ -11,6 +11,14 @@ import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png" // Your logo image path
 import axios from "axios"
 import Loading from './loading'
+interface Transaction {
+  id: number;
+  name: string;
+  amount: number;
+  description?: string;
+  category?: string; // Optional field
+  date: string;
+}
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [userId,setuserId]=useState(1);
@@ -18,30 +26,58 @@ export default function Component() {
   
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [totalexpense , settotoalexpense]=useState(0)
+  const [totolincome , setincometotal] =useState(0)
   useEffect(() => {
-    const token = localStorage.getItem('token')
-
+    const token = localStorage.getItem('token');
+  
     if (!token) {
-      router.push('/signup')
-      console.log("token are not presrnt in the storage ")
-      return  
+      router.push('/signup');
+      return;
     }
-     console.log(token);
-    // Verify the token with the server
-    axios.post('http://localhost:3000/api/verify-token', { token:token })
-      .then(response => {
-        setuserId(response.data.user.id)
-        // If the token is valid, continue to the signup page
-        setIsLoading(false)
-      })
-      .catch(() => {
-        console.log("token failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
-        router.push('/signin')
-      })
-     
-  }, [router])
+  
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/api/verify-token', { token });
+        const userId = response.data.user.id;
+  
+        const transactionResponse = await axios.post('/api/transaction', { userId });
+        const { expenses, incomes , totalExpenses ,totalIncomes } = transactionResponse.data;
+        settotoalexpense(totalExpenses);
+        setincometotal(totalIncomes)
+        
+        console.log(totalExpenses , totalIncomes , expenses)
+        const normalizedExpenses = expenses.map((expense: any) => ({
+          id: expense.id,
+          name: expense.name, // Use the name field directly
+          amount: expense.amount,
+          description: expense.description,
+          category: expense.category,
+          date: expense.date,
+        }));
+  
+        const normalizedIncomes = incomes.map((income: any) => ({
+          id: income.id,
+          name: income.Incomename, // Map incomename to name
+          amount: income.amount,
+          description: income.description,
+          date: income.date,
+        }));
+  
+        setTransactions([...normalizedExpenses, ...normalizedIncomes]);
+        
+      } catch (err) {
+        setError('Failed to fetch transactions');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchTransactions();
+  }, [router]);
+  
+  
   if (isLoading) {
     return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
   }
@@ -56,29 +92,7 @@ export default function Component() {
     { day: "Sun", amount: 200 },
   ]
 
-  const recentTransactions = [
-    {
-      id: "84995",
-      name: "Grocery Shopping",
-      amount: -120.50,
-      date: "22 June 2024",
-      category: "Food",
-    },
-    {
-      id: "84994",
-      name: "Salary Deposit",
-      amount: 3500.00,
-      date: "21 June 2024",
-      category: "Income",
-    },
-    {
-      id: "84993",
-      name: "Netflix Subscription",
-      amount: -15.99,
-      date: "20 June 2024",
-      category: "Entertainment",
-    },
-  ]
+  
 
   const maxAmount = Math.max(...spendingData.map(d => d.amount))
 
@@ -176,22 +190,22 @@ export default function Component() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-green-100 p-4 rounded-lg">
                   <h3 className="font-semibold text-green-800">Total Income</h3>
-                  <p className="text-2xl font-bold text-green-600">$5,240.00</p>
+                  <p className="text-2xl font-bold text-green-600">₹{totolincome}</p>
                 </div>
                 <div className="bg-red-100 p-4 rounded-lg">
                   <h3 className="font-semibold text-red-800">Total Expenses</h3>
-                  <p className="text-2xl font-bold text-red-600">$3,120.00</p>
+                  <p className="text-2xl font-bold text-red-600">₹{totalexpense}</p>
                 </div>
                 <div className="bg-blue-100 p-4 rounded-lg">
                   <h3 className="font-semibold text-blue-800">Net Balance</h3>
-                  <p className="text-2xl font-bold text-blue-600">$2,120.00</p>
+                  <p className="text-2xl font-bold text-blue-600">₹{totolincome+totalexpense}</p>
                 </div>
               </div>
               <div className="flex justify-center space-x-4">
-                <Button size="lg" className="w-40 h-12" onClick={() => { router.push("/expense/incomeAdd") }}>
+                <Button size="lg" className="w-40 h-12" onClick={() => { router.push("/incomeAdd") }}>
                   <PlusCircle className="mr-2 h-4 w-4" /> Add Income
                 </Button>
-                <Button size="lg" className="w-40 h-12" onClick={() => { router.push("/expense/expenseAdd") }}>
+                <Button size="lg" className="w-40 h-12" onClick={() => { router.push("/expenseAdd") }}>
                   <MinusCircle className="mr-2 h-4 w-4" /> Add Expense
                 </Button>
               </div>
@@ -203,22 +217,28 @@ export default function Component() {
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Recent Transactions</h2>
             <div className="space-y-4 mt-4">
-              {recentTransactions.map((transaction) => (
-                <Card key={transaction.id}>
-                  <CardContent className="flex justify-between">
-                    <div>
-                      <h3 className="font-semibold">{transaction.name}</h3>
-                      <p className="text-sm text-gray-500">{transaction.date}</p> 
-                    </div>
-                    <div>
-                      <p className={`font-bold ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        {transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount).toFixed(2)}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            {transactions.map((transaction , index )=> (
+        <Card key={`transaction-${transaction.id}-${index}`}>
+          <CardContent className="flex justify-between">
+            <div>
+              <h3 className="font-semibold">{transaction.name || transaction.name}</h3>
+              <p className="text-sm text-gray-500">
+                  {new Date(transaction.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
             </div>
+            <div>
+              <p className={`font-bold ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                {transaction.amount < 0 ? '-' : '+'}₹{Math.abs(transaction.amount).toFixed(2)}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+            </div>  
           </div>
         </div>
       </main>

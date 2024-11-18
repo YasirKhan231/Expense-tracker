@@ -11,39 +11,67 @@ import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
 import axios from "axios"
 import Loading from '@/components/loading'
-
+interface Transaction {
+  id: number;
+  name: string;
+  amount: number;
+  description?: string;
+  category?: string; // Optional field
+  date: string;
+}
 export default function Component() {
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [userId,setuserId]=useState(1);
+  const [Transactions , setTransactions]=useState<Transaction[]>([])
+  const [totalexpense , settotoalexpense]=useState(0);
+  const [totalincome , settotalincome] =useState(0)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-
+    const token = localStorage.getItem('token');
+  
     if (!token) {
-      router.push('/signup')
-      console.log("token are not presrnt in the storage ")
-      return  
+      router.push('/signup');
+      return;
     }
-     console.log(token);
-    // Verify the token with the server
-    axios.post('http://localhost:3000/api/verify-token', { token:token })
-      .then(response => {
-        setuserId(response.data.user.id)
-        // If the token is valid, continue to the signup page
-        setIsLoading(false)
-        console.log(response.data)
-      })
-      .catch(() => {
-        console.log("tken failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
-        router.push('/signin')
-      })
-     
-  }, [router])
+  
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/api/verify-token', { token });
+        const userId = response.data.user.id;
+  
+        const transactionResponse = await axios.post('/api/transaction', { userId });
+        const { expenses, incomes,totalIncomes , totalExpenses } = transactionResponse.data;
+     settotalincome(totalIncomes);
+     settotoalexpense(totalExpenses)
+        const normalizedExpenses = expenses.map((expense: any) => ({
+          id: expense.id,
+          name: expense.name, // Use the name field directly
+          amount: expense.amount,
+          description: expense.description,
+          category: expense.category,
+          date: expense.date,
+        }));
+  
+        const normalizedIncomes = incomes.map((income: any) => ({
+          id: income.id,
+          name: income.Incomename, // Map incomename to name
+          amount: income.amount,
+          description: income.description,
+          date: income.date,
+        }));
+  
+        setTransactions([...normalizedExpenses, ...normalizedIncomes]);
+      } catch  {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchTransactions();
+  }, [router]);
   if (isLoading) {
     return <div> <Loading></Loading> </div>  // Show a loading spinner or something until the check is complete
   }
@@ -60,29 +88,29 @@ export default function Component() {
     { day: "Sun", amount: 200 },
   ]
 
-  const recentTransactions = [
-    {
-      id: "84995",
-      name: "Grocery Shopping",
-      amount: -120.50,
-      date: "22 June 2024",
-      category: "Food",
-    },
-    {
-      id: "84994",
-      name: "Salary Deposit",
-      amount: 3500.00,
-      date: "21 June 2024",
-      category: "Income",
-    },
-    {
-      id: "84993",
-      name: "Netflix Subscription",
-      amount: -15.99,
-      date: "20 June 2024",
-      category: "Entertainment",
-    },
-  ]
+  // const recentTransactions = [
+  //   {
+  //     id: "84995",
+  //     name: "Grocery Shopping",
+  //     amount: -120.50,
+  //     date: "22 June 2024",
+  //     category: "Food",
+  //   },
+  //   {
+  //     id: "84994",
+  //     name: "Salary Deposit",
+  //     amount: 3500.00,
+  //     date: "21 June 2024",
+  //     category: "Income",
+  //   },
+  //   {
+  //     id: "84993",
+  //     name: "Netflix Subscription",
+  //     amount: -15.99,
+  //     date: "20 June 2024",
+  //     category: "Entertainment",
+  //   },
+  // ]
 
   const maxAmount = Math.max(...spendingData.map(d => d.amount))
 
@@ -197,28 +225,28 @@ export default function Component() {
                 <Wallet className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$8,738</div>
-                <p className="text-xs text-muted-foreground">+16.9% from last month</p>
+                <div className="text-2xl font-bold">₹{totalincome+totalexpense}</div>
+                <p className="text-xs text-muted-foreground"></p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Expenses</CardTitle>
+                <CardTitle className="text-sm font-medium">total Expenses</CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$2,475</div>
-                <p className="text-xs text-muted-foreground">+24.5% from last month</p>
+                <div className="text-2xl font-bold">₹{totalexpense}</div>
+                <p className="text-xs text-muted-foreground"></p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Income</CardTitle>
+                <CardTitle className="text-sm font-medium">total Income</CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$5,000</div>
-                <p className="text-xs text-muted-foreground">+18.7% from last month</p>
+                <div className="text-2xl font-bold">₹{totalincome}</div>
+                <p className="text-xs text-muted-foreground"></p>
               </CardContent>
             </Card>
           </div>
@@ -247,8 +275,8 @@ export default function Component() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentTransactions.map((transaction) => (
-                    <div key={transaction.id} className="flex items-center justify-between">
+                  {Transactions.map((transaction , index) => (
+                    <div key={`transaction-${transaction.id}-${index}`} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{transaction.name}</p>
                         <p className="text-sm text-muted-foreground">{transaction.date}</p>

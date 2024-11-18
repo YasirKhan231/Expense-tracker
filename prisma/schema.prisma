@@ -17,8 +17,8 @@ model User {
   username String
   email    String    @unique
   password String
-  expenses Expense[] // Connects each user to their expenses
-  incomes  Income[] // Connects each user to their incomes
+  expenses Expense[]
+  incomes  Income[]
 }
 
 model Expense {
@@ -26,12 +26,12 @@ model Expense {
   name        String   @map("expense_name")
   amount      Float    @map("amount")
   description String?  @map("description")
-  category    String   @map("category") // Store category as a string directly
+  category    String   @map("category")
   date        DateTime @map("date")
   createdAt   DateTime @default(now())
 
-  user   User @relation(fields: [userId], references: [id]) // Expense is linked to a user
-  userId Int // User ID is required for expenses
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Income {
@@ -42,6 +42,6 @@ model Income {
   date        DateTime @map("date")
   createdAt   DateTime @default(now())
 
-  user   User @relation(fields: [userId], references: [id]) // Income is linked to a user
-  userId Int // User ID is required for incomes
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }

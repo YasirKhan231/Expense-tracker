@@ -118,7 +118,7 @@ export default function SignupPage() {
         </CardFooter>
       </Card>
       <footer className="mt-8 text-center text-gray-500 text-sm">
-        © 2023 ExpenseTracker. All rights reserved.
+        © 2023 Walletwise. All rights reserved.
       </footer>
     </div>
   )

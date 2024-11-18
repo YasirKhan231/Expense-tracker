@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Progress } from '@radix-ui/react-progress'
-import Image from 'next/image'; // Import Image component for handling logos
-import logo from "@/app/logo.png" // Your logo image path
+import Image from 'next/image'; 
+import logo from "@/app/logo.png" 
 import axios from "axios"
 import Loading from '@/components/loading'
 export default function BudgetPage() {
@@ -19,7 +19,6 @@ export default function BudgetPage() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -30,22 +29,20 @@ export default function BudgetPage() {
       return  
     }
      console.log(token);
-    // Verify the token with the server
     axios.post('http://localhost:3000/api/verify-token', { token:token })
       .then(response => {
-        // If the token is valid, continue to the signup page
         setIsLoading(false)
         console.log(response)
       })
       .catch(() => {
         console.log("tken failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
+        localStorage.removeItem('token') 
         router.push('/signin')
       })
      
   }, [router])
   if (isLoading) {
-    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  
   }
 
   // Sample budget data
@@ -189,7 +186,7 @@ export default function BudgetPage() {
         {/* Footer */}
         <footer className="bg-white border-t py-4">
           <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-            © 2023 ExpenseTracker. All rights reserved.
+            © 2023 Walletwise. All rights reserved.
           </div>
         </footer>
       </div>

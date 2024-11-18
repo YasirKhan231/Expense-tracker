@@ -175,7 +175,9 @@ export default function AddExpensePage() {
                     <SelectItem value="food">Food</SelectItem>
                     <SelectItem value="clothes">Clothes</SelectItem>
                     <SelectItem value="entertainment">Entertainment</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="Transportation">Transportation</SelectItem>
+                    <SelectItem value="Rent">Rent</SelectItem>
+                    <SelectItem value="other">Utilities</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
