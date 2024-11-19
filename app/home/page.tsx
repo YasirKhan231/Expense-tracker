@@ -43,7 +43,7 @@ export default function Component() {
   
     const fetchTransactions = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/verify-token', { token });
+        const response = await axios.post('/api/verify-token', { token });
         const userId = response.data.user.id;
   
         const transactionResponse = await axios.post('/api/transaction', { userId });
@@ -69,6 +69,7 @@ export default function Component() {
         }));
   
         setTransactions([...normalizedExpenses, ...normalizedIncomes]);
+        // const LimitedTransactions = Transactions.slice(0,4)
       } catch  {
       } finally {
         setIsLoading(false);
@@ -87,7 +88,7 @@ export default function Component() {
   
 
   const maxAmount = Math.max(...spendingData.map(d => Math.abs(d.amount)));
-
+  
   // Convert the amounts to positive values for rendering
   const transformedData = spendingData.map(item => ({
     day: item.day,
@@ -99,7 +100,7 @@ export default function Component() {
   
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
-
+   const LimitedTransactions = Transactions.slice(0,4)
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       <Button
@@ -237,7 +238,7 @@ export default function Component() {
                 <p className="text-xs text-muted-foreground">Last 30 days Total income</p>
               </CardContent>
             </Card>
-          </div>
+          </div> 
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
@@ -251,7 +252,7 @@ export default function Component() {
                      <div 
                           className="w-6 bg-black rounded-t"
                           style={{ 
-                            height: `${(Math.abs(data.amount) / maxAmount) * 100}`, 
+                            height: `${Math.abs((data.amount * 100) / maxAmount)}%`,
                             transition: 'height 0.5s ease' // Adding a smooth transition for better UX
                           }}
                         ></div>
@@ -267,7 +268,7 @@ export default function Component() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Transactions.map((transaction , index) => (
+                  {LimitedTransactions.map((transaction , index) => (
                     <div key={`transaction-${transaction.id}-${index}`} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{transaction.name}</p>

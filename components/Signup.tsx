@@ -5,38 +5,44 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, ArrowRight } from 'lucide-react'
+import { AlertCircle, ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useToast } from "@/hooks/use-toast"
 
 export default function SignupPage() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const { toast } = useToast()
+
+  const isFormComplete = username && email && password && password.length >= 8
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
-    if (!username || !email || !password) {
-      setError('All fields are required')
-      return
-    }
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters long')
+    if (!isFormComplete) {
+      setError('All fields are required and password must be at least 8 characters long')
+      setIsLoading(false)
       return
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/Signup", { username, password, email })
+      const response = await axios.post("/api/Signup", { username, password, email })
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-
+        localStorage.setItem("token", response.data.token)
+        toast({
+          title: "Sign Up Successful",
+          description: "Welcome to WalletWise!",
+          duration: 5000,
+        })
         router.push('/home')
       } else {
         setError('Failed to sign up. Please try again.')
@@ -47,6 +53,8 @@ export default function SignupPage() {
       setPassword('')
     } catch (error) {
       setError('Error occurred during signup. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -102,9 +110,22 @@ export default function SignupPage() {
                 </span>
               </div>
             )}
-            <Button type="submit" className="w-full bg-black hover:bg-gray-800 text-white transition-colors duration-200">
-              Sign Up
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              type="submit" 
+              className="w-full bg-black hover:bg-gray-800 text-white transition-colors duration-200"
+              disabled={!isFormComplete || isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing Up...
+                </>
+              ) : (
+                <>
+                  Sign Up
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </form>
         </CardContent>

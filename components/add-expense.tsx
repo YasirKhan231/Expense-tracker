@@ -49,7 +49,7 @@ export default function AddExpensePage() {
     }
   
     // Verify the token with the server
-    axios.post('http://localhost:3000/api/verify-token', { token: token })
+    axios.post('/api/verify-token', { token: token })
       .then(response => {
         // If the token is valid, set userId from the response
         console.log(response)

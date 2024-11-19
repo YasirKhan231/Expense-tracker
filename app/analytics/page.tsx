@@ -7,60 +7,65 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'; // Import Image component for handling logos
+import Image from 'next/image'
 import logo from "@/app/logo.png"
 import Link from 'next/link'
 import axios from "axios"
 import Loading from '@/components/loading'
+import { ResponsiveContainer,  Pie, Cell, Legend, Tooltip } from 'recharts'
+
+interface Expense {
+  category: string;
+  amount: number;
+}
+
 export default function AnalyticsPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
-  
+  const [monthlyExpenses, setMonthlyExpenses] = useState<Expense[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+
   useEffect(() => {
-    const token = localStorage.getItem('token')
-
+    const token = localStorage.getItem('token');
+  
     if (!token) {
-      router.push('/signup')
-      console.log("token are not presrnt in the storage ")
-      return  
+      router.push('/signup');
+      return;
     }
-     console.log(token);
-    // Verify the token with the server
-    axios.post('http://localhost:3000/api/verify-token', { token:token })
-      .then(response => {
-        // If the token is valid, continue to the signup page
-        setIsLoading(false)
-      })
-      .catch(() => {
-        console.log("tken failed homepage ")
-        localStorage.removeItem('token') // Optionally, clear the token
-        router.push('/signin')
-      })
-     
-  }, [router])
-  if (isLoading) {
-    return <div><Loading></Loading></div>  
-  }
-  const monthlyExpenses = [
-    { category: 'Food', amount: 500 },
-    { category: 'Rent', amount: 1200 },
-    { category: 'Utilities', amount: 300 },
-    { category: 'Transportation', amount: 200 },
-    { category: 'Entertainment', amount: 150 },
-  ]
+  
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.post('/api/verify-token', { token });
+        const userId = response.data.user.id;
+  
+        const categoryResponse = await axios.post('/api/category', { userId });
+        const { monthlyExpenses } = categoryResponse.data;
+        setMonthlyExpenses(monthlyExpenses);
+      } catch {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchTransactions();
+  }, [router]);
 
-  const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0)
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + Math.abs(expense.amount), 0)
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Button
         variant="outline"
         size="icon"
-        className={`fixed left-13 top-3.5 z-50 transition-all duration-300 ${isSidebarOpen ? 'left-[258px]' : 'left-14.5'}`}
+        className={`fixed left-4 top-4 z-50 md:hidden ${isSidebarOpen ? 'left-[230px]' : 'left-4'}`}
         onClick={toggleSidebar}
         aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
@@ -70,62 +75,53 @@ export default function AnalyticsPage() {
       {/* Sidebar */}
       <aside 
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
         `}>
         <div className="p-4">
           <h2 className="text-2xl font-bold mb-4">WalletWise</h2>
         </div>
         <nav className="space-y-2 p-2">
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/home") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/home")}>
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/analytics") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/analytics")}>
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/transaction") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/transaction")}>
             <CreditCard className="mr-2 h-4 w-4" />
             Transactions
           </Button>
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/budget") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/budget")}>
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/about") }}>
+          <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/about")}>
             <InformationCircleIcon className="mr-2 h-4 w-4" />
             About us 
           </Button>
         </nav>
       </aside>
 
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
         {/* Navbar */}
         <header className="bg-white border-b p-4 flex justify-between items-center">
-          <div className="ml-12 flex items-center space-x-4">
-            {/* Logo Display */}
-            <Image  src={logo} alt="WalletWise Logo" width={64} height={64} onClick={()=>{router.push("/home")}} className="object-contain hover:cursor-pointer" />
+          <div className="flex items-center space-x-4">
+            <Image src={logo} alt="WalletWise Logo" width={64} height={64} onClick={() => router.push("/home")} className="object-contain hover:cursor-pointer" />
           </div>
           <div className="flex items-center space-x-4">
-          <Link href="/signin">
-          <Button
-            variant="default"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
-           
-          >
-            Sign In
-          </Button>
-          </Link>
-          <Link href="/signup">
-          <Button
-            variant="default"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
-           
-          >
-            Logout
-          </Button></Link>
-          
-        </div>
+            <Link href="/signin">
+              <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Logout
+              </Button>
+            </Link>
+          </div>
         </header>
 
         {/* Main Content */}
@@ -139,12 +135,12 @@ export default function AnalyticsPage() {
                 {monthlyExpenses.map((expense, index) => (
                   <div key={index} className="flex justify-between items-center">
                     <span>{expense.category}</span>
-                    <span>${expense.amount}</span>
+                    <span>₹{Math.abs(expense.amount).toFixed(2)}</span>
                   </div>
                 ))}
                 <div className="border-t pt-4 font-bold flex justify-between items-center">
                   <span>Total Expenses</span>
-                  <span>${totalExpenses}</span>
+                  <span>₹{totalExpenses.toFixed(2)}</span>
                 </div>
               </div>
             </CardContent>
@@ -160,7 +156,7 @@ export default function AnalyticsPage() {
                   <div key={index} className="flex flex-col items-center">
                     <div 
                       className="w-16 bg-blue-500 rounded-t"
-                      style={{ height: `${(expense.amount / totalExpenses) * 100}%` }}
+                      style={{ height: Math.abs((expense.amount*200)/totalExpenses) }}
                     ></div>
                     <span className="text-xs mt-2">{expense.category}</span>
                   </div>

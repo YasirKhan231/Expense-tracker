@@ -30,7 +30,7 @@ export default function BudgetPage() {
       return  
     }
      console.log(token);
-    axios.post('http://localhost:3000/api/verify-token', { token:token })
+    axios.post('/api/verify-token', { token:token })
       .then(response => {
         setIsLoading(false)
         console.log(response)

@@ -40,7 +40,7 @@ export default function Component() {
   
     const fetchTransactions = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/verify-token', { token });
+        const response = await axios.post('/api/verify-token', { token });
         const userId = response.data.user.id;
   
         const transactionResponse = await axios.post('/api/transaction', { userId });
