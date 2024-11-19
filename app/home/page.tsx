@@ -11,6 +11,7 @@ import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
 import axios from "axios"
 import Loading from '@/components/loading'
+import Link from 'next/link'
 interface Transaction {
   id: number;
   name: string;
@@ -19,16 +20,19 @@ interface Transaction {
   category?: string; // Optional field
   date: string;
 }
+interface SpendingData {
+  day: string;
+  amount: number;
+}
 export default function Component() {
   
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const [userId,setuserId]=useState(1);
   const [Transactions , setTransactions]=useState<Transaction[]>([])
   const [totalexpense , settotoalexpense]=useState(0);
   const [totalincome , settotalincome] =useState(0)
-
+  const [spendingData , setspendingData] = useState<SpendingData[]>([])
   useEffect(() => {
     const token = localStorage.getItem('token');
   
@@ -43,9 +47,10 @@ export default function Component() {
         const userId = response.data.user.id;
   
         const transactionResponse = await axios.post('/api/transaction', { userId });
-        const { expenses, incomes,totalIncomes , totalExpenses } = transactionResponse.data;
-     settotalincome(totalIncomes);
-     settotoalexpense(totalExpenses)
+        const { expenses, incomes,last30DaysTotalExpenses , last30DaysTotalIncomes ,spendingData} = transactionResponse.data;
+     settotalincome(last30DaysTotalIncomes);
+     settotoalexpense(last30DaysTotalExpenses)
+     setspendingData(spendingData);
         const normalizedExpenses = expenses.map((expense: any) => ({
           id: expense.id,
           name: expense.name, // Use the name field directly
@@ -77,42 +82,21 @@ export default function Component() {
   }
 
  
+
+
   
-  const spendingData = [
-    { day: "Mon", amount: 120 },
-    { day: "Tue", amount: 240 },
-    { day: "Wed", amount: 180 },
-    { day: "Thu", amount: 320 },
-    { day: "Fri", amount: 280 },
-    { day: "Sat", amount: 400 },
-    { day: "Sun", amount: 200 },
-  ]
 
-  // const recentTransactions = [
-  //   {
-  //     id: "84995",
-  //     name: "Grocery Shopping",
-  //     amount: -120.50,
-  //     date: "22 June 2024",
-  //     category: "Food",
-  //   },
-  //   {
-  //     id: "84994",
-  //     name: "Salary Deposit",
-  //     amount: 3500.00,
-  //     date: "21 June 2024",
-  //     category: "Income",
-  //   },
-  //   {
-  //     id: "84993",
-  //     name: "Netflix Subscription",
-  //     amount: -15.99,
-  //     date: "20 June 2024",
-  //     category: "Entertainment",
-  //   },
-  // ]
+  const maxAmount = Math.max(...spendingData.map(d => Math.abs(d.amount)));
 
-  const maxAmount = Math.max(...spendingData.map(d => d.amount))
+  // Convert the amounts to positive values for rendering
+  const transformedData = spendingData.map(item => ({
+    day: item.day,
+    amount: Math.abs(item.amount),  // Ensure all amounts are positive
+  }));
+  
+  console.log("Transformed Data:", transformedData); // Log the transformed dat
+  console.log(maxAmount)
+  
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
@@ -141,7 +125,7 @@ export default function Component() {
             <Home className="mr-2 h-4 w-4" />
             Home
           </Button>
-          <Button  onClick={()=>{router.push("/analytics")}} variant="ghost" className="w-full justify-start">
+          <Button variant="ghost" className="w-full justify-start"  onClick={()=>{router.push("/analytics")}}  >
             <PieChart className="mr-2 h-4 w-4" />
             Analytics
           </Button>
@@ -169,21 +153,25 @@ export default function Component() {
             {/* <span className="text-xl font-semibold">WalletWise</span> */}
           </div>
           <div className="flex items-center space-x-4">
-            <Button onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign In
-            </Button>
-            <Button onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-              <AvatarFallback>AX</AvatarFallback>
-            </Avatar>
-          </div>
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
+            Sign In
+          </Button>
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
+            Sign Up
+          </Button></Link>
+          
+        </div>
         </header>
 
         {/* New feature: Stylized text */}
@@ -226,27 +214,27 @@ export default function Component() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">₹{totalincome+totalexpense}</div>
-                <p className="text-xs text-muted-foreground"></p>
+                <p className="text-xs text-muted-foreground">Last 30 days Total Balance</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">total Expenses</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">₹{totalexpense}</div>
-                <p className="text-xs text-muted-foreground"></p>
+                <p className="text-xs text-muted-foreground">Last 30 days Total expense</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">total Income</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Income</CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">₹{totalincome}</div>
-                <p className="text-xs text-muted-foreground"></p>
+                <p className="text-xs text-muted-foreground">Last 30 days Total income</p>
               </CardContent>
             </Card>
           </div>
@@ -258,11 +246,15 @@ export default function Component() {
               <CardContent>
                 <div className="h-[200px] flex items-end justify-between">
                   {spendingData.map((data, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <div 
-                        className="w-6 bg-black rounded-t"
-                        style={{ height: `${(data.amount / maxAmount) * 100}%` }}
-                      ></div>
+                    
+                    <div key={index} className="flex flex-col items-center">        
+                     <div 
+                          className="w-6 bg-black rounded-t"
+                          style={{ 
+                            height: `${(Math.abs(data.amount) / maxAmount) * 100}`, 
+                            transition: 'height 0.5s ease' // Adding a smooth transition for better UX
+                          }}
+                        ></div>
                       <span className="text-xs mt-2">{data.day}</span>
                     </div>
                   ))}
@@ -279,7 +271,11 @@ export default function Component() {
                     <div key={`transaction-${transaction.id}-${index}`} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{transaction.name}</p>
-                        <p className="text-sm text-muted-foreground">{transaction.date}</p>
+                        <p className="text-sm text-muted-foreground">{new Date(transaction.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}</p>
                       </div>
                       <div className={`font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {transaction.amount > 0 ? '+' : ''}{transaction.amount.toFixed(2)}

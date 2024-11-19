@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, CalendarIcon } from 'lucide-react'
+import { Bell, CalendarIcon, Loader2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover"
 import { format } from "date-fns"
 import axios from 'axios'
+import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 import { ToastAction } from "@/components/ui/toast"
 import { useRouter } from 'next/navigation'
@@ -25,10 +26,14 @@ export default function AddIncomePage() {
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>()
-  const [userId,setuserId]=useState(1);
+  const [userId, setUserId] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+
+  const isFormComplete = Incomename && amount && date
+
   useEffect(() => {
     const token = localStorage.getItem('token');
   
@@ -44,7 +49,7 @@ export default function AddIncomePage() {
         // If the token is valid, set userId from the response
         console.log(response);
         setIsLoading(false);
-        setuserId(response.data.user.id);  // Assuming response contains user data with the id
+        setUserId(response.data.user.id);  // Assuming response contains user data with the id
       })
       .catch(() => {
         console.log("Token failed verification");
@@ -55,6 +60,7 @@ export default function AddIncomePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
 
     const incomeData = {
       Incomename,
@@ -64,9 +70,8 @@ export default function AddIncomePage() {
       userId
     }
     
-
     try {
-       await axios.post("http://localhost:3000/api/income/add", incomeData)
+      await axios.post("http://localhost:3000/api/income/add", incomeData)
       
       toast({
         description: "Income added successfully.",
@@ -80,10 +85,12 @@ export default function AddIncomePage() {
       setDate(undefined)
     } catch (error) {
       toast({
-         //@ts-expect-error
+        //@ts-expect-error
         description: error.response?.data?.error || "An error occurred while adding the income.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -93,17 +100,22 @@ export default function AddIncomePage() {
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <h1 className="ml-9 text-xl font-semibold">Hi, Alex 👋</h1>
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">Home</Button>
-          <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">Sign In</Button>
-          <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">Sign Up</Button>
-          <Button variant="ghost" size="icon" className="p-3">
-            <Bell className="h-6 w-6" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <Avatar className="w-12 h-12">
-            <AvatarImage src="/placeholder.svg" alt="User avatar" />
-            <AvatarFallback>AX</AvatarFallback>
-          </Avatar>
+          <Link href="/signin">
+            <Button
+              variant="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button
+              variant="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+            >
+              Sign Up
+            </Button>
+          </Link>
         </div>
       </header>
 
@@ -171,7 +183,20 @@ export default function AddIncomePage() {
                   </Popover>
                 </div>
               </div>
-              <Button type="submit" className="w-full mt-4">Add Income</Button>
+              <Button 
+                type="submit" 
+                className="w-full mt-4"
+                disabled={!isFormComplete || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Adding Income...
+                  </>
+                ) : (
+                  'Add Income'
+                )}
+              </Button>
             </form>
           </CardContent>
           <CardFooter />

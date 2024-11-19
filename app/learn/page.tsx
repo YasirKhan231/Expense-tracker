@@ -8,6 +8,7 @@ import { Bell, CreditCard, Home, PieChart, Wallet } from 'lucide-react'
 import { useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "@/components/loading"
+import Link from "next/link"
 export default function AboutUsPage() {
   const router = useRouter();
   
@@ -45,20 +46,24 @@ export default function AboutUsPage() {
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <h1 className="text-xl font-semibold">About WalletWise</h1>
         <div className="flex items-center space-x-4">
-              <Button onClick={()=>{router.push("/signin")}} variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
             Sign In
           </Button>
-          <Button onClick={()=>{router.push("/signup")}} size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
             Sign Up
-          </Button>
-          <Button variant="ghost" size="icon" className="p-3">
-            <Bell className="h-6 w-6" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <Avatar className="w-12 h-12">
-            <AvatarImage src="/placeholder.svg" alt="User avatar" />
-            <AvatarFallback>AX</AvatarFallback>
-          </Avatar>
+          </Button></Link>
+          
         </div>
       </header>
 

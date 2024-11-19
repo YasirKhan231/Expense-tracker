@@ -11,38 +11,12 @@ import Image from 'next/image';
 import logo from "@/app/logo.png" 
 import axios from "axios"
 import Loading from '@/components/loading'
+import Link from 'next/link'
 export default function AboutUsPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
-  
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-
-    if (!token) {
-      router.push('/signup')
-      console.log("token are not presrnt in the storage ")
-      return  
-    }
-     console.log(token);
-    axios.post('http://localhost:3000/api/verify-token', { token:token })
-      .then(response => {
-      
-        setIsLoading(false)
-      })
-      .catch(() => {
-        console.log("tken failed homepage ")
-        localStorage.removeItem('token') 
-        router.push('/signin')
-      })
-     
-  }, [router])
-  if (isLoading) {
-    return <div><Loading></Loading></div>  
-  }
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -106,21 +80,25 @@ export default function AboutUsPage() {
             />
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign In
-            </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-              <AvatarFallback>AX</AvatarFallback>
-            </Avatar>
-          </div>
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
+            Sign In
+          </Button>
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
+            Sign Up
+          </Button></Link>
+          
+        </div>
         </header>
 
         {/* Main Content */}

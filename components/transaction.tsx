@@ -11,6 +11,7 @@ import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png" // Your logo image path
 import axios from "axios"
 import Loading from './loading'
+import Link from 'next/link'
 interface Transaction {
   id: number;
   name: string;
@@ -135,10 +136,11 @@ export default function Component() {
             <Wallet className="mr-2 h-4 w-4" />
             Budgets
           </Button>
-          <Button variant="ghost" className="w-full justify-start" onClick={() => { router.push("/about") }}>
+          <Link href="/about"><Button variant="ghost" className="w-full justify-start" >
             <InformationCircleIcon className="mr-2 h-4 w-4" />
             About us 
-          </Button>
+          </Button></Link>
+          
         </nav>
       </aside>
 
@@ -161,21 +163,25 @@ export default function Component() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign In
-            </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-              <AvatarFallback>AX</AvatarFallback>
-            </Avatar>
-          </div>
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
+            Sign In
+          </Button>
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
+            Sign Up
+          </Button></Link>
+          
+        </div>
         </header>
 
         {/* Main content */}

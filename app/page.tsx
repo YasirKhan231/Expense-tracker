@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Bell, Home, PieChart, Plus, Settings, User } from "lucide-react";
+import { BarChart3, Bell, Home, PieChart, Plus, Settings, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import logo from "./logo.png";  // Import your logo image
+import { LinkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export default function AboutUs() {
   const router = useRouter();
@@ -14,7 +16,7 @@ export default function AboutUs() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b p-2 flex justify-between items-center">
+      <header className="bg-white border-b p-2 flex justify-between items-center shadow-md">
         {/* Logo Section */}
         <div className="flex items-center ml-7">
           <Image
@@ -27,33 +29,24 @@ export default function AboutUs() {
         </div>
         {/* Navigation Buttons */}
         <div className="flex items-center space-x-4">
+          <Link href="/signin">
           <Button
-            variant="ghost"
-            size="lg"
-            className="hidden md:inline-flex text-lg py-2 px-4"
-            onClick={() => {
-              router.push("/signin");
-            }}
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
           >
             Sign In
           </Button>
+          </Link>
+          <Link href="/signup">
           <Button
-            size="lg"
-            className="hidden md:inline-flex text-lg py-2 px-4"
-            onClick={() => {
-              router.push("/signup");
-            }}
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
           >
             Sign Up
-          </Button>
-          <Button variant="ghost" size="icon" className="p-3">
-            <Bell className="h-6 w-6" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <Avatar className="w-12 h-12">
-            <AvatarFallback className="">AX</AvatarFallback>
-            <AvatarImage src="/placeholder.svg" alt="User avatar" />
-          </Avatar>
+          </Button></Link>
+          
         </div>
       </header>
 
@@ -69,6 +62,9 @@ export default function AboutUs() {
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                 Your personal finance companion for effortless expense management and insightful financial tracking.
               </p>
+              <Link href="/home">
+                <Button size="lg" className="mt-4">Get Started</Button>
+              </Link>
             </div>
           </div>
         </section>

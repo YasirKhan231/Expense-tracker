@@ -17,9 +17,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ msg:"Method not alloweddddd "}, {status:405});
   }
   const { token } =await req.json()
-  console.log("token")
   try {
-    console.log("inside try catch");
     const decoded = jwt.verify(token, JWT_SECRET)as JwtPayload;;
      
     // Check if the token is associated with an existing user (replace with your database query)

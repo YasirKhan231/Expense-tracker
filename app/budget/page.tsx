@@ -12,6 +12,7 @@ import Image from 'next/image';
 import logo from "@/app/logo.png" 
 import axios from "axios"
 import Loading from '@/components/loading'
+import Link from 'next/link'
 export default function BudgetPage() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -120,21 +121,25 @@ export default function BudgetPage() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign In
-            </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-              <AvatarFallback>AX</AvatarFallback>
-            </Avatar>
-          </div>
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
+            Sign In
+          </Button>
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
+            Sign Up
+          </Button></Link>
+          
+        </div>
         </header>
 
         {/* Main Content */}

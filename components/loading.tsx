@@ -7,7 +7,7 @@ export default function Loading() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Loading</CardTitle>
-          <CardDescription>Please wait while we prepare your content</CardDescription>
+          <CardDescription>Please wait while we loading your content</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center p-6">
           <div className="flex items-center space-x-4">

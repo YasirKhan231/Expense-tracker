@@ -9,6 +9,7 @@ import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'; // Import Image component for handling logos
 import logo from "@/app/logo.png"
+import Link from 'next/link'
 import axios from "axios"
 import Loading from '@/components/loading'
 export default function AnalyticsPage() {
@@ -42,10 +43,8 @@ export default function AnalyticsPage() {
      
   }, [router])
   if (isLoading) {
-    return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
+    return <div><Loading></Loading></div>  
   }
-
-  // Sample data for analytics
   const monthlyExpenses = [
     { category: 'Food', amount: 500 },
     { category: 'Rent', amount: 1200 },
@@ -108,21 +107,25 @@ export default function AnalyticsPage() {
             <Image  src={logo} alt="WalletWise Logo" width={64} height={64} onClick={()=>{router.push("/home")}} className="object-contain hover:cursor-pointer" />
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign In
-            </Button>
-            <Button size="lg" className="hidden md:inline-flex text-lg py-2 px-4">
-              Sign Up
-            </Button>
-            <Button variant="ghost" size="icon" className="p-3">
-              <Bell className="h-6 w-6" />
-              <span className="sr-only">Notifications</span>
-            </Button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder.svg" alt="User avatar" />
-              <AvatarFallback>AX</AvatarFallback>
-            </Avatar>
-          </div>
+          <Link href="/signin">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
+           
+          >
+            Sign In
+          </Button>
+          </Link>
+          <Link href="/signup">
+          <Button
+            variant="default"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
+           
+          >
+            Logout
+          </Button></Link>
+          
+        </div>
         </header>
 
         {/* Main Content */}

@@ -6,14 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Calendar as CalendarIcon, Home } from "lucide-react"
+import { CalendarIcon, Home, Loader2 } from 'lucide-react'
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import axios from 'axios';
+import axios from 'axios'
 import {
   Select,
   SelectContent,
@@ -26,45 +26,50 @@ import { ToastAction } from "@/components/ui/toast"
 import Loading from './loading'
 
 export default function AddExpensePage() {
-  const [name, setname] = useState('')
+  const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
-  const[userId , setuserId]=useState(1)
-  const router = useRouter();
+  const [userId, setUserId] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
+
+  const isFormComplete = name && amount && category && date
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
   
     if (!token) {
-      router.push('/signup');
-      console.log("Token is not present in the storage");
-      return;
+      router.push('/signup')
+      console.log("Token is not present in the storage")
+      return
     }
   
     // Verify the token with the server
     axios.post('http://localhost:3000/api/verify-token', { token: token })
       .then(response => {
         // If the token is valid, set userId from the response
-        console.log(response);
-        setIsLoading(false);
-        setuserId(response.data.user.id);  // Assuming response contains user data with the id
+        console.log(response)
+        setIsLoading(false)
+        setUserId(response.data.user.id)  // Assuming response contains user data with the id
       })
       .catch(() => {
-        console.log("Token failed verification");
-        localStorage.removeItem('token'); // Optionally, clear the token
-        router.push('/signin');
-      });
-  }, [router]);
-  if (isLoading) {
-    return <div> <Loading></Loading> </div>  // Show a loading spinner or something until the check is complete
-  }
+        console.log("Token failed verification")
+        localStorage.removeItem('token') // Optionally, clear the token
+        router.push('/signin')
+      })
+  }, [router])
 
+  if (isLoading) {
+    return <div><Loading /></div>  // Show a loading spinner or something until the check is complete
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
 
     // Prepare the data to be sent to the backend
     const expenseData = {
@@ -75,35 +80,37 @@ export default function AddExpensePage() {
       date: date ? date.toISOString() : null, // Date in ISO format
       userId,
     }
-    console.log("Sending expense data:", expenseData);
+    console.log("Sending expense data:", expenseData)
     try {
       // POST request to the backend endpoint
-      await axios.post("http://localhost:3000/api/expense/add", expenseData);
+      await axios.post("http://localhost:3000/api/expense/add", expenseData)
 
       // Show success toast
       toast({
         description: "Expense added successfully.",
-      });
+      })
 
       // Navigate to the homepage after successful submission
-      router.push("/home");
+      router.push("/home")
 
       // Clear form fields
-      setname('');
-      setAmount('');
-      setCategory('');
-      setDescription('');
-      setDate(undefined);
+      setName('')
+      setAmount('')
+      setCategory('')
+      setDescription('')
+      setDate(undefined)
 
     } catch (error) {
-      console.error('Error adding expense:', error);
+      console.error('Error adding expense:', error)
 
       // Show error toast
       toast({
         //@ts-expect-error
         description: error.response?.data?.error || "An error occurred while adding the expense.",
         action: <ToastAction altText="Close">Close</ToastAction>,
-      });
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -150,7 +157,7 @@ export default function AddExpensePage() {
                   id="expense-name"
                   placeholder="Enter expense name"
                   value={name}
-                  onChange={(e) => setname(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
@@ -215,8 +222,19 @@ export default function AddExpensePage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <Button type="submit" className="w-full bg-black hover:bg-gray-800 text-white">
-                Add Expense
+              <Button 
+                type="submit" 
+                className="w-full bg-black hover:bg-gray-800 text-white"
+                disabled={!isFormComplete || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Adding Expense...
+                  </>
+                ) : (
+                  'Add Expense'
+                )}
               </Button>
             </form>
           </CardContent>
