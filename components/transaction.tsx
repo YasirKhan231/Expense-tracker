@@ -44,18 +44,17 @@ export default function Component() {
         const userId = response.data.user.id;
   
         const transactionResponse = await axios.post('/api/transaction', { userId });
-        const { expenses, incomes , totalExpenses ,totalIncomes } = transactionResponse.data;
+        const { expenses, incomes, totalExpenses, totalIncomes } = transactionResponse.data;
         settotoalexpense(totalExpenses);
-        setincometotal(totalIncomes)
-        
-        console.log(totalExpenses , totalIncomes , expenses)
+        setincometotal(totalIncomes);
+  
         const normalizedExpenses = expenses.map((expense: any) => ({
           id: expense.id,
           name: expense.name, // Use the name field directly
           amount: expense.amount,
           description: expense.description,
           category: expense.category,
-          date: expense.date,
+          date: new Date(expense.date), // Convert to Date object for easier sorting
         }));
   
         const normalizedIncomes = incomes.map((income: any) => ({
@@ -63,11 +62,14 @@ export default function Component() {
           name: income.Incomename, // Map incomename to name
           amount: income.amount,
           description: income.description,
-          date: income.date,
+          date: new Date(income.date), // Convert to Date object for easier sorting
         }));
   
-        setTransactions([...normalizedExpenses, ...normalizedIncomes]);
-        
+        const sortedTransactions = [...normalizedExpenses, ...normalizedIncomes].sort(
+          (a, b) => b.date.getTime() - a.date.getTime()
+        );
+  
+        setTransactions(sortedTransactions);
       } catch (err) {
         setError('Failed to fetch transactions');
       } finally {
@@ -77,6 +79,7 @@ export default function Component() {
   
     fetchTransactions();
   }, [router]);
+  
   
   
   if (isLoading) {
