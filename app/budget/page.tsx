@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
+import {  CreditCard, Home, PieChart, Wallet, Menu, X, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import logo from "@/app/logo.png"

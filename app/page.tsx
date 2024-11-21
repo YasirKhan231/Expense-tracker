@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Bell, Home, PieChart, Plus, Settings, User } from 'lucide-react';
+import { BarChart3,  Home, PieChart, Plus, Settings, User } from 'lucide-react';
 import logo from "./logo.png";  // Import your logo image
 import Link from "next/link";
 

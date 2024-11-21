@@ -26,7 +26,6 @@ export default function AddIncomePage() {
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>()
   const [userId, setUserId] = useState(1)
-  const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
@@ -47,7 +46,6 @@ export default function AddIncomePage() {
       .then(response => {
         // If the token is valid, set userId from the response
         console.log(response);
-        setIsLoading(false);
         setUserId(response.data.user.id);  // Assuming response contains user data with the id
       })
       .catch(() => {

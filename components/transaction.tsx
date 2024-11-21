@@ -24,7 +24,6 @@ export default function Component() {
   const router = useRouter()
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [totalexpense , settotoalexpense]=useState(0)
   const [totolincome , setincometotal] =useState(0)
@@ -68,8 +67,6 @@ export default function Component() {
         );
   
         setTransactions(sortedTransactions);
-      } catch  {
-        setError('Failed to fetch transactions');
       } finally {
         setIsLoading(false);
       }
@@ -84,15 +81,7 @@ export default function Component() {
     return <div><Loading></Loading></div>  // Show a loading spinner or something until the check is complete
   }
 
-  const spendingData = [
-    { day: "Mon", amount: 120 },
-    { day: "Tue", amount: 240 },
-    { day: "Wed", amount: 180 },
-    { day: "Thu", amount: 320 },
-    { day: "Fri", amount: 280 },
-    { day: "Sat", amount: 400 },
-    { day: "Sun", amount: 200 },
-  ]
+  
 
   
 
