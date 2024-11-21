@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, CalendarIcon, Loader2 } from 'lucide-react'
+import {  CalendarIcon, Loader2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"

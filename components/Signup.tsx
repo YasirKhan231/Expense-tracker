@@ -51,7 +51,7 @@ export default function SignupPage() {
       setUsername('')
       setEmail('')
       setPassword('')
-    } catch (error) {
+    } catch  {
       setError('Error occurred during signup. Please try again.')
     } finally {
       setIsLoading(false)

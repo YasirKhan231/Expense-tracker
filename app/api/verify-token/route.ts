@@ -1,13 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+
 import jwt from 'jsonwebtoken' // assuming you're using JWT for token signing
-import { PrismaClient } from '@prisma/client';
 import client from "@/db"
 import { NextRequest, NextResponse } from 'next/server';
 const JWT_SECRET = "yasirsecret"
 
 
 
-export  async function POST(req: NextRequest, res: NextResponse) {
+export  async function POST(req: NextRequest, ) {
   interface JwtPayload {
     id: number;
     email: string;

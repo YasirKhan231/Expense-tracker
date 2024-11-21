@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt"
 import client from "@/db"
 import jwt from "jsonwebtoken"
-require('dotenv').config();
 
 const JWT_SECRET ="yasirsecret"
 

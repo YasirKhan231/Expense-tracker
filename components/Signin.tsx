@@ -42,7 +42,7 @@ export default function SignInPage() {
       })
 
       router.push('/home')
-    } catch (error) {
+    } catch  {
       setError('Invalid email or password')
     } finally {
       setIsLoading(false)

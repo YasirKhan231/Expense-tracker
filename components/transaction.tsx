@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bell, CreditCard, Home, Menu, MinusCircle, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {  CreditCard, Home, Menu, MinusCircle, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
@@ -22,7 +21,6 @@ interface Transaction {
 }
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const [userId,setuserId]=useState(1);
   const router = useRouter()
   
   const [isLoading, setIsLoading] = useState(true)
@@ -70,7 +68,7 @@ export default function Component() {
         );
   
         setTransactions(sortedTransactions);
-      } catch (err) {
+      } catch  {
         setError('Failed to fetch transactions');
       } finally {
         setIsLoading(false);
@@ -98,7 +96,6 @@ export default function Component() {
 
   
 
-  const maxAmount = Math.max(...spendingData.map(d => d.amount))
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 

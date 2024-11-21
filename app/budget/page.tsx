@@ -12,8 +12,6 @@ import logo from "@/app/logo.png"
 import axios from "axios"
 import Loading from '@/components/loading'
 import Link from 'next/link'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 interface Expense {
   category: string;
   totalAmount: number;
@@ -24,7 +22,7 @@ export default function BudgetPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [totalExpense , settotalExpense]=useState<Expense[]>([])
   const [sumtotalExpense , setsumtotalExpense]=useState(0)
-  const [budgetamount , setbudgetamount]=useState(150000)
+  const budgetamount =150000;
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
   useEffect(() => {
@@ -57,14 +55,7 @@ export default function BudgetPage() {
     return <div><Loading></Loading></div>
   }
 
-  // Sample budget data
-  const budgets = [
-    { category: 'Food', budget: 500, spent: 350, icon: <CreditCard className="h-4 w-4" /> },
-    { category: 'Rent', budget: 1200, spent: 1200, icon: <Home className="h-4 w-4" /> },
-    { category: 'Utilities', budget: 300, spent: 280, icon: <Bell className="h-4 w-4" /> },
-    { category: 'Transportation', budget: 200, spent: 150, icon: <TrendingUp className="h-4 w-4" /> },
-    { category: 'Entertainment', budget: 150, spent: 100, icon: <PieChart className="h-4 w-4" /> },
-  ]
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">

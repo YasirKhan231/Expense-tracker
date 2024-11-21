@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bell, CreditCard, Home, Menu, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
+import {  CreditCard, Home, Menu, PieChart, PlusCircle, Wallet, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
@@ -59,7 +59,7 @@ export default function Component() {
         setSpendingData(responseSpendingData)
 
         const normalizedTransactions = [
-          ...expenses.map((expense: any) => ({
+          ...expenses.map((expense :any) => ({
             id: expense.id,
             name: expense.name,
             amount: expense.amount,

@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { message: "Login successful with credentials", token }
     );
-  } catch (error) {
+  } catch  {
     return NextResponse.json(
       { message: "Error occurred during login" },
       { status: 500 }

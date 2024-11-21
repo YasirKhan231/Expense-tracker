@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {  NextApiResponse } from 'next';
 import prisma from '@/db'; // Ensure this points to your Prisma client
 import { NextRequest, NextResponse } from 'next/server';
 

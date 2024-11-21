@@ -1,10 +1,8 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bell, CreditCard, Home, PieChart, Wallet } from 'lucide-react'
 import { useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "@/components/loading"
@@ -13,8 +11,6 @@ export default function AboutUsPage() {
   const router = useRouter();
   
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -26,7 +22,7 @@ export default function AboutUsPage() {
     }
      console.log(token);
     axios.post('/api/verify-token', { token:token })
-      .then(response => {
+      .then(() => {
         setIsLoading(false)
       })
       .catch(() => {
