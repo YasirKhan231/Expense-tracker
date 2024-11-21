@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, CreditCard, Home, PieChart, Wallet, Menu, X } from 'lucide-react'
@@ -12,11 +11,10 @@ import logo from "@/app/logo.png"
 import Link from 'next/link'
 import axios from "axios"
 import Loading from '@/components/loading'
-import { ResponsiveContainer,  Pie, Cell, Legend, Tooltip } from 'recharts'
 
 interface Expense {
   category: string;
-  amount: number;
+  totalAmount: number;
 }
 
 export default function AnalyticsPage() {
@@ -36,13 +34,13 @@ export default function AnalyticsPage() {
     }
   
     const fetchTransactions = async () => {
-      try {
-        const response = await axios.post('/api/verify-token', { token });
-        const userId = response.data.user.id;
-  
-        const categoryResponse = await axios.post('/api/category', { userId });
-        const { monthlyExpenses } = categoryResponse.data;
-        setMonthlyExpenses(monthlyExpenses);
+      try {  
+        const categoryResponse = await axios.post('/api/category', { token });
+        console.log("after the response ")
+        console.log(categoryResponse)
+        const { expenses } = categoryResponse.data;
+
+        setMonthlyExpenses(expenses);
       } catch {
       } finally {
         setIsLoading(false);
@@ -56,10 +54,9 @@ export default function AnalyticsPage() {
     return <Loading />;
   }
 
-  const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + Math.abs(expense.amount), 0)
+  const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + Math.abs(expense.totalAmount), 0)
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
-
+console.log(totalExpenses)
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Button
@@ -111,14 +108,14 @@ export default function AnalyticsPage() {
             <Image src={logo} alt="WalletWise Logo" width={64} height={64} onClick={() => router.push("/home")} className="object-contain hover:cursor-pointer" />
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="/signin">
+            <Link href="/expenseAdd">
               <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Sign In
+                Add Expense
               </Button>
             </Link>
-            <Link href="/signup">
+            <Link href="/incomeAdd">
               <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Logout
+                Add Income
               </Button>
             </Link>
           </div>
@@ -128,14 +125,14 @@ export default function AnalyticsPage() {
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Monthly Expense Breakdown</CardTitle>
+              <CardTitle>Category wise Expense Breakdown</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {monthlyExpenses.map((expense, index) => (
                   <div key={index} className="flex justify-between items-center">
                     <span>{expense.category}</span>
-                    <span>₹{Math.abs(expense.amount).toFixed(2)}</span>
+                    <span>₹{Math.abs(expense.totalAmount).toFixed(2)}</span>
                   </div>
                 ))}
                 <div className="border-t pt-4 font-bold flex justify-between items-center">
@@ -156,7 +153,7 @@ export default function AnalyticsPage() {
                   <div key={index} className="flex flex-col items-center">
                     <div 
                       className="w-16 bg-blue-500 rounded-t"
-                      style={{ height: Math.abs((expense.amount*200)/totalExpenses) }}
+                      style={{ height: Math.abs((expense.totalAmount*200)/totalExpenses) }}
                     ></div>
                     <span className="text-xs mt-2">{expense.category}</span>
                   </div>

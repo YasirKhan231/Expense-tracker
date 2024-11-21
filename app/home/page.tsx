@@ -77,8 +77,7 @@ export default function Component() {
         ]
 
         setTransactions(normalizedTransactions)
-      } catch (error) {
-        console.error('Error fetching data:', error)
+      } catch  {
       } finally {
         setIsLoading(false)
       }
@@ -151,20 +150,20 @@ export default function Component() {
             <Image src={logo} alt="WalletWise Logo" width={64} height={64} className="object-contain cursor-pointer" />
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="/signin">
+            <Link href="/expenseAdd">
               <Button
                 variant="default"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
               >
-                Sign In
+                Add Expense
               </Button>
             </Link>
-            <Link href="/signup">
+            <Link href="/incomeAdd">
               <Button
                 variant="default"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
               >
-                Sign Up
+                Add Income
               </Button>
             </Link>
           </div>
@@ -202,7 +201,7 @@ export default function Component() {
             </Button>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Income</CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />

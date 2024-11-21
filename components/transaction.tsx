@@ -166,22 +166,22 @@ export default function Component() {
           </div>
 
           <div className="flex items-center space-x-4">
-          <Link href="/signin">
+          <Link href="/expenseAdd">
           <Button
             variant="default"
             className="bg-primary text-primary-foreground hover:bg-primary/90 mr-4"
            
           >
-            Sign In
+            Add Expense
           </Button>
           </Link>
-          <Link href="/signup">
+          <Link href="/incomeAdd">
           <Button
             variant="default"
             className="bg-primary text-primary-foreground hover:bg-primary/90 mr-6"
            
           >
-            Sign Up
+            Add Income
           </Button></Link>
           
         </div>

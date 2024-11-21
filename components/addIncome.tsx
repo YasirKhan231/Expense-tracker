@@ -71,7 +71,7 @@ export default function AddIncomePage() {
     }
     
     try {
-      await axios.post("http://localhost:3000/api/income/add", incomeData)
+      await axios.post("/api/income/add", incomeData)
       
       toast({
         description: "Income added successfully.",

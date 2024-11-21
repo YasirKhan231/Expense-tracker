@@ -83,7 +83,7 @@ export default function AddExpensePage() {
     console.log("Sending expense data:", expenseData)
     try {
       // POST request to the backend endpoint
-      await axios.post("http://localhost:3000/api/expense/add", expenseData)
+      await axios.post("/api/expense/add", expenseData)
 
       // Show success toast
       toast({
@@ -120,7 +120,7 @@ export default function AddExpensePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0 flex items-center">
-              <span className="font-bold text-xl text-black">ExpenseDown</span>
+              <span className="font-bold text-xl text-black">Walletwise</span>
             </div>
             <div className="flex space-x-4 items-center">
               <Link href="/">
@@ -179,12 +179,12 @@ export default function AddExpensePage() {
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="food">Food</SelectItem>
-                    <SelectItem value="clothes">Clothes</SelectItem>
-                    <SelectItem value="entertainment">Entertainment</SelectItem>
+                    <SelectItem value="Food">Food</SelectItem>
+                    <SelectItem value="Clothes">Clothes</SelectItem>
+                    <SelectItem value="Entertainment">Entertainment</SelectItem>
                     <SelectItem value="Transportation">Transportation</SelectItem>
                     <SelectItem value="Rent">Rent</SelectItem>
-                    <SelectItem value="other">Utilities</SelectItem>
+                    <SelectItem value="Utilities">Utilities</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,39 +9,44 @@ import { AlertCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(false)
   const router = useRouter()
+  const { toast } = useToast()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    setIsFormValid(email.trim() !== '' && password.trim() !== '')
+  }, [email, password])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
-    if (!email || !password) {
-      setError('Both fields are required')
-      return
-    }
-
-    // Make the API request to sign in
-    axios.post("http://localhost:3000/api/Signin", { email, password })
-      .then(response => {
-        // Assuming the response contains a token
-        const { token } = response.data
-        
-        // Store the token in localStorage
-        localStorage.setItem('token', token)
-        
-        // Redirect to the home page
-        router.push('/home')
+    try {
+      const response = await axios.post("/api/Signin", { email, password })
+      const { token } = response.data
+      localStorage.setItem('token', token)
+      
+      toast({
+        title: "Signed in successfully",
+        description: "Welcome back to WalletWise!",
+        duration: 3000,
       })
-      .catch(() => setError('Invalid email or password'))
 
-    // Clear the input fields after submission
-    setEmail('')
-    setPassword('')
+      router.push('/home')
+    } catch (error) {
+      setError('Invalid email or password')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -84,9 +89,13 @@ export default function SignInPage() {
                 </span>
               </div>
             )}
-            <Button type="submit" className="w-full bg-black hover:bg-gray-800 text-white transition-colors duration-200">
-              Sign In
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              type="submit" 
+              className="w-full bg-black hover:bg-gray-800 text-white transition-colors duration-200"
+              disabled={!isFormValid || isLoading}
+            >
+              {isLoading ? 'Signing In...' : 'Sign In'}
+              {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
           </form>
         </CardContent>
@@ -102,6 +111,7 @@ export default function SignInPage() {
       <footer className="mt-8 text-center text-gray-500 text-sm">
         © 2023 Walletwise. All rights reserved.
       </footer>
+      <Toaster />
     </div>
   )
 }
