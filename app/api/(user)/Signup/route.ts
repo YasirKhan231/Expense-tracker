@@ -9,7 +9,7 @@ const JWT_SECRET ="yasirsecret"
 export async function POST (req:NextRequest) {
   const body = await  req.json();
   try{
-    const existinguser = await client.user.findUnique({
+    const existinguser = await client.user.findFirst({
       where : {
         email : body.email
       }
