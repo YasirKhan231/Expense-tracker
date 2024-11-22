@@ -100,13 +100,12 @@ export default function AddExpensePage() {
       setDescription('')
       setDate(undefined)
 
-    } catch (error) {
-      console.error('Error adding expense:', error)
+    } catch  {
+      console.log('Error adding expense:')
 
       // Show error toast
       toast({
-        //@ts-expect-error
-        description: error.response?.data?.error || "An error occurred while adding the expense.",
+        description: "An error occurred while adding the expense.",
         action: <ToastAction altText="Close">Close</ToastAction>,
       })
     } finally {

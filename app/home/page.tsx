@@ -25,6 +25,23 @@ interface Transaction {
   category?: string;
   date: string;
 }
+interface Expense {
+  id: number;
+  name: string;
+  amount: number;
+  description?: string;
+  category?: string;
+  date: string;
+}
+
+interface Income {
+  id: number;
+  Incomename: string;
+  amount: number;
+  description?: string;
+  date: string;
+}
+
 
 export default function Component() {
   const [isLoading, setIsLoading] = useState(true)
@@ -59,7 +76,7 @@ export default function Component() {
         setSpendingData(responseSpendingData)
 
         const normalizedTransactions = [
-          ...expenses.map((expense :any) => ({
+          ...expenses.map((expense :Expense) => ({
             id: expense.id,
             name: expense.name,
             amount: expense.amount,
@@ -67,7 +84,7 @@ export default function Component() {
             category: expense.category,
             date: expense.date,
           })),
-          ...incomes.map((income: any) => ({
+          ...incomes.map((income: Income) => ({
             id: income.id,
             name: income.Incomename,
             amount: income.amount,
