@@ -1,15 +1,20 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
-}
+  return new PrismaClient();
+};
 
+// Declare the global prisma instance only in development environment
 declare global {
-  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
+  var prisma: PrismaClient | undefined;
 }
 
-const prisma = globalThis.prisma ?? prismaClientSingleton()
+// Initialize the Prisma client, either from the global variable (in development) or a fresh instance (in production)
+const prisma = globalThis.prisma ?? prismaClientSingleton();
 
-export default prisma
+// Assign the Prisma client to the global variable in non-production (development) environments
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prisma = prisma;
+}
 
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma
+export default prisma;
