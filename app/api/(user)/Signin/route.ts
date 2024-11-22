@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingUser = await client.user.findUnique({
+    const existingUser = await client.user.findFirst({
       where: { email: body.email },
     });
 
