@@ -11,11 +11,11 @@ export async function POST(req: NextRequest) {
 
     if (!body.email || !body.password) {
       return NextResponse.json(
-        { message: "Email and password are required" },
+        { message: "Email and password also required are required" },
         { status: 400 }
       );
     }
-
+    // complied here no problem occur 
     const existingUser = await client.user.findFirst({
       where: { email: body.email },
     });
