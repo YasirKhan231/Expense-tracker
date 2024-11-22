@@ -3,13 +3,19 @@ import bcrypt from "bcrypt";
 import client from "@/db";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "yasirsecret"; // Your JWT secret key
+const JWT_SECRET = "yasirsecret";
 
 export async function POST(req: NextRequest) {
   try {
     const body: { email: string; password: string } = await req.json();
 
-    // Check if the user exists
+    if (!body.email || !body.password) {
+      return NextResponse.json(
+        { message: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await client.user.findUnique({
       where: { email: body.email },
     });
@@ -21,13 +27,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Log stored and entered passwords for debugging
-    console.log('Stored Password Hash:', existingUser.password);
-    console.log('Entered Password:', body.password);
-
-    // Compare passwords using bcrypt
     const isPasswordValid = await bcrypt.compare(
-      body.password.trim(), // Trim any extra spaces
+      body.password.trim(),
       existingUser.password.trim()
     );
 
@@ -38,18 +39,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: existingUser.id, email: existingUser.email },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // Successful login response
     return NextResponse.json(
       { message: "Login successful with credentials", token }
     );
   } catch  {
+    console.log("Error during login:");
     return NextResponse.json(
       { message: "Error occurred during login" },
       { status: 500 }
