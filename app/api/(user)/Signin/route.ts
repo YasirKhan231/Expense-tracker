@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+
 import prisma from '@/db'; // Ensure this points to your Prisma client
 import { NextRequest, NextResponse } from 'next/server';
 
