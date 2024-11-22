@@ -1,19 +1,19 @@
-import {  NextApiResponse } from 'next';
+
 import prisma from '@/db'; // Ensure this points to your Prisma client
 import { NextRequest, NextResponse } from 'next/server';
 
-export  async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   // Ensure it's a POST request
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    return NextResponse.json({ error: 'Method Not Allowed' }, { status: 405 });
   }
 
   try {
     // Parse the userId from the request body
-    const { userId } = await  req.json();
+    const { userId } = await req.json();
 
     if (!userId) {
-      return NextResponse.json({ error: 'User ID is required' }, {status:400});
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     const currentDate = new Date();
@@ -104,9 +104,7 @@ export  async function POST(req: NextRequest, res: NextApiResponse) {
       },
       { status: 200 }
     );
-
-   
-  } catch {
-    return NextResponse.json({ error: 'Failed to fetch transactions' } , {status :403});
+  } catch  {
+    return NextResponse.json({ error: 'Failed to fetch transactions' }, { status: 403 });
   }
 }

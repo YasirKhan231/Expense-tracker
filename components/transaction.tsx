@@ -19,6 +19,23 @@ interface Transaction {
   category?: string; // Optional field
   date: string;
 }
+interface Expense {
+  id: number;
+  name: string;
+  amount: number;
+  description?: string;
+  category?: string;
+  date: string;
+}
+
+interface Income {
+  id: number;
+  Incomename: string;
+  amount: number;
+  description?: string;
+  date: string;
+}
+
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const router = useRouter()
@@ -45,7 +62,7 @@ export default function Component() {
         settotoalexpense(totalExpenses);
         setincometotal(totalIncomes);
   
-        const normalizedExpenses = expenses.map((expense: any) => ({
+        const normalizedExpenses = expenses.map((expense: Expense) => ({
           id: expense.id,
           name: expense.name, // Use the name field directly
           amount: expense.amount,
@@ -54,7 +71,7 @@ export default function Component() {
           date: new Date(expense.date), // Convert to Date object for easier sorting
         }));
   
-        const normalizedIncomes = incomes.map((income: any) => ({
+        const normalizedIncomes = incomes.map((income: Income) => ({
           id: income.id,
           name: income.Incomename, // Map incomename to name
           amount: income.amount,
